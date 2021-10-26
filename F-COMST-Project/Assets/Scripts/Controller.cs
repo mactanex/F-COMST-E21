@@ -9,13 +9,16 @@ public class Controller : MonoBehaviour
     public static Controller Instance { get; protected set; }
     [Header("Camera")]
     public Camera MainCamera;
-    public Transform CameraPosition;
+    public Transform PlayerPosition;
     [Header("Control Settings")]
-    public float MouseSensitivity = 100.0f;
+    public float MouseSensitivity = 25.0f;
     public float PlayerSpeed = 5.0f;
     public float RunningSpeed = 7.0f;
-    public float JumpSpeed = 5.0f;
+    public float JumpSpeed = 12.0f;
+    public float gravity = 10f;
+    public float crouchSmooth = 10f;
 
+    Vector3 lastVelocity = Vector3.zero;
     [Header("Audio")]
     public AudioClip[] Clips;
     public float PitchMin = 1.0f;
@@ -26,13 +29,15 @@ public class Controller : MonoBehaviour
     public AudioClip JumpingAudioCLip;
     public AudioClip LandingAudioClip;
 
-    float m_VerticalSpeed = 0.0f;
+    
+    
+    Vector3 last_velocity = Vector3.zero;
     bool m_IsPaused = false;
 
     float m_VerticalAngle, m_HorizontalAngle;
 
 
-    public float Speed { get; private set; } = 0.0f;
+    public float currentVerticalSpeed { get; private set; } = 0.0f;
 
     public bool LockControl { get; set; }
     public bool CanPause { get; set; } = true;
@@ -41,9 +46,11 @@ public class Controller : MonoBehaviour
 
     CharacterController m_CharacterController;
 
+    Inventory m_inventory;
+
     bool m_Grounded;
     float m_GroundedTimer;
-    float m_SpeedAtJump = 0.0f;
+    bool m_crouching = false;
 
 
     void Awake()
@@ -60,10 +67,12 @@ public class Controller : MonoBehaviour
         m_IsPaused = false;
         m_Grounded = true;
 
-        MainCamera.transform.SetParent(CameraPosition, false);
+        MainCamera.transform.SetParent(PlayerPosition, false);
         MainCamera.transform.localPosition = Vector3.zero;
         MainCamera.transform.localRotation = Quaternion.identity;
         m_CharacterController = GetComponent<CharacterController>();
+        m_inventory = GetComponent<Inventory>();
+        
 
         m_VerticalAngle = 0.0f;
         m_HorizontalAngle = transform.localEulerAngles.y;
@@ -73,11 +82,12 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CanPause && Input.GetButtonDown("Menu"))
-        {
-            //PauseMenu.Instance.Display();
-        }
-
+        Vector3 m_velocity = Vector3.zero;
+        //if (CanPause && Input.GetButtonDown("Menu"))
+        //{
+        //    m_IsPaused = !m_IsPaused;
+        //}
+        InternalLockUpdate();
         bool wasGrounded = m_Grounded;
         bool loosedGrounding = false;
         if (!m_CharacterController.isGrounded)
@@ -85,12 +95,13 @@ public class Controller : MonoBehaviour
             if (m_Grounded)
             {
                 m_GroundedTimer += Time.deltaTime;
-                if (m_GroundedTimer >= 0.5f)
+                if (m_GroundedTimer >= 0.2f)
                 {
                     loosedGrounding = true;
                     m_Grounded = false;
                 }
             }
+                
         }
         else
         {
@@ -98,39 +109,54 @@ public class Controller : MonoBehaviour
             m_Grounded = true;
         }
 
-        Speed = 0;
-        Vector3 move = Vector3.zero;
         if (!m_IsPaused && !LockControl)
         {
-            // Jump (we do it first 
-            if (m_Grounded && Input.GetButtonDown("Jump"))
+            // We are grounded, so recalculate move direction based on axes
+            Vector3 forward = transform.TransformDirection(Vector3.forward);
+            Vector3 right = transform.TransformDirection(Vector3.right);
+            // Press Left Shift to run
+            bool isRunning = Input.GetKey(KeyCode.LeftShift);
+            float curSpeedX = !m_IsPaused ? (isRunning ? RunningSpeed : PlayerSpeed) * Input.GetAxis("Vertical") : 0;
+            float curSpeedY = !m_IsPaused ? (isRunning ? RunningSpeed : PlayerSpeed) * Input.GetAxis("Horizontal") : 0;
+            float movementDirectionY = m_velocity.y;
+            m_velocity = (forward * curSpeedX) + (right * curSpeedY);
+
+            if (Input.GetButton("Jump") && !m_IsPaused && m_Grounded)
             {
-                m_VerticalSpeed = JumpSpeed;
-                m_Grounded = false;
-                loosedGrounding = true;
-                PlayClip(JumpingAudioCLip, 0.8f, 1.1f);
+                m_velocity.y = JumpSpeed;
+            }
+            else
+            {
+                m_velocity.y = movementDirectionY;
             }
 
-            //Running
-            bool running = Input.GetButton("Run");
-            float actualSpeed = running ? RunningSpeed : PlayerSpeed;
-
-            if (loosedGrounding)
+            if (!m_CharacterController.isGrounded)
             {
-                m_SpeedAtJump = actualSpeed;
+                m_velocity.y -= gravity;
             }
 
-            // Move around with WASD
-            move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-            if (move.sqrMagnitude > 1.0f)
-                move.Normalize();
 
-            float usedSpeed = m_Grounded ? actualSpeed : m_SpeedAtJump;
+            //crouching
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                if (m_crouching)
+                {
 
-            move = move * usedSpeed * Time.deltaTime;
+                    m_CharacterController.height = 2.0f;
+                    MainCamera.transform.position = Vector3.Lerp(transform.position,new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z),Time.deltaTime* crouchSmooth);
+                    m_crouching = false;
+                }
+                else
+                {
+                    m_crouching = true;
+                    MainCamera.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z), Time.deltaTime*crouchSmooth);
+                    m_CharacterController.height = 1.0f;
 
-            move = transform.TransformDirection(move);
-            m_CharacterController.Move(move);
+                }
+            }
+
+            // Move the controller
+            m_CharacterController.Move(m_velocity * Time.deltaTime);
 
             // Turn player
             float turnPlayer = Input.GetAxis("Mouse X") * MouseSensitivity;
@@ -147,28 +173,52 @@ public class Controller : MonoBehaviour
             var turnCam = -Input.GetAxis("Mouse Y");
             turnCam = turnCam * MouseSensitivity;
             m_VerticalAngle = Mathf.Clamp(turnCam + m_VerticalAngle, -89.0f, 89.0f);
-            currentAngles = CameraPosition.transform.localEulerAngles;
+            currentAngles = PlayerPosition.transform.localEulerAngles;
             currentAngles.x = m_VerticalAngle;
-            CameraPosition.transform.localEulerAngles = currentAngles;
+            PlayerPosition.transform.localEulerAngles = currentAngles;
 
-            Speed = move.magnitude / (PlayerSpeed * Time.deltaTime);
 
+            //currentVerticalSpeed = move.magnitude / (PlayerSpeed * Time.deltaTime);
+            
+            
             
         }
 
-        // Fall down / gravity
-        m_VerticalSpeed = m_VerticalSpeed - 10.0f * Time.deltaTime;
-        if (m_VerticalSpeed < -10.0f)
-            m_VerticalSpeed = -10.0f; // max fall speed
-        var verticalMove = new Vector3(0, m_VerticalSpeed * Time.deltaTime, 0);
-        var flag = m_CharacterController.Move(verticalMove);
-        if ((flag & CollisionFlags.Below) != 0)
-            m_VerticalSpeed = 0;
+    }
 
-        if (!wasGrounded && m_Grounded)
+
+    //controls the locking and unlocking of the mouse
+    private void InternalLockUpdate()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
         {
-            PlayClip(LandingAudioClip, 0.8f, 1.1f);
+            m_IsPaused = true;
         }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            m_IsPaused = false;
+        }
+
+        if (!m_IsPaused)
+        {
+            UnlockCursor();
+        }
+        else if (m_IsPaused)
+        {
+            LockCursor();
+        }
+    }
+
+    private void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    private void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void DisplayCursor(bool display)
