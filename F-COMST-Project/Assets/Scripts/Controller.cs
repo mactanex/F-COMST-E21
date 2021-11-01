@@ -95,7 +95,7 @@ public class Controller : MonoBehaviour
             if (m_Grounded)
             {
                 m_GroundedTimer += Time.deltaTime;
-                if (m_GroundedTimer >= 0.2f)
+                if (m_GroundedTimer >= 0.1f)
                 {
                     loosedGrounding = true;
                     m_Grounded = false;
@@ -132,13 +132,19 @@ public class Controller : MonoBehaviour
 
             if (!m_CharacterController.isGrounded)
             {
-                m_velocity.y -= gravity;
+                m_velocity.y -= gravity * (Time.fixedDeltaTime)*40;
             }
 
-
+            if (isRunning)
+            {
+                m_CharacterController.height = 2.0f;
+                MainCamera.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), Time.deltaTime * crouchSmooth);
+                m_crouching = false;
+            }
             //crouching
             if (Input.GetKeyDown(KeyCode.C))
             {
+                
                 if (m_crouching)
                 {
 
