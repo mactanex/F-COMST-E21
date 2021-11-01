@@ -14,8 +14,8 @@ public class Controller : MonoBehaviour
     public float MouseSensitivity = 25.0f;
     public float PlayerSpeed = 5.0f;
     public float RunningSpeed = 7.0f;
-    public float JumpSpeed = 12.0f;
-    public float gravity = 10f;
+    public float JumpSpeed = 10.0f;
+    public float gravity = 14.0f;
     public float crouchSmooth = 10f;
 
     Vector3 lastVelocity = Vector3.zero;
@@ -83,31 +83,10 @@ public class Controller : MonoBehaviour
     void Update()
     {
         Vector3 m_velocity = Vector3.zero;
-        //if (CanPause && Input.GetButtonDown("Menu"))
-        //{
-        //    m_IsPaused = !m_IsPaused;
-        //}
         InternalLockUpdate();
         bool wasGrounded = m_Grounded;
-        bool loosedGrounding = false;
-        if (!m_CharacterController.isGrounded)
-        {
-            if (m_Grounded)
-            {
-                m_GroundedTimer += Time.deltaTime;
-                if (m_GroundedTimer >= 0.1f)
-                {
-                    loosedGrounding = true;
-                    m_Grounded = false;
-                }
-            }
-                
-        }
-        else
-        {
-            m_GroundedTimer = 0.0f;
-            m_Grounded = true;
-        }
+        //bool loosedGrounding = false;
+        
 
         if (!m_IsPaused && !LockControl)
         {
@@ -118,24 +97,33 @@ public class Controller : MonoBehaviour
             bool isRunning = Input.GetKey(KeyCode.LeftShift);
             float curSpeedX = !m_IsPaused ? (isRunning ? RunningSpeed : PlayerSpeed) * Input.GetAxis("Vertical") : 0;
             float curSpeedY = !m_IsPaused ? (isRunning ? RunningSpeed : PlayerSpeed) * Input.GetAxis("Horizontal") : 0;
-            float movementDirectionY = m_velocity.y;
-            m_velocity = (forward * curSpeedX) + (right * curSpeedY);
+            
 
-            if (Input.GetButton("Jump") && !m_IsPaused && m_Grounded)
+            m_velocity = (forward * curSpeedX) + (right * curSpeedY);
+            m_velocity.y = 0;
+            if (m_CharacterController.isGrounded)
             {
-                m_velocity.y = JumpSpeed;
-            }
+                currentVerticalSpeed = -gravity * Time.deltaTime;
+                if (Input.GetButton("Jump") )
+                {
+                    currentVerticalSpeed = JumpSpeed;
+                    if(m_crouching)
+                    {
+                        m_CharacterController.height = 2.0f;
+                        MainCamera.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), Time.deltaTime * crouchSmooth);
+                        m_crouching = false;
+                    }
+                }
+            } 
             else
             {
-                m_velocity.y = movementDirectionY;
+                currentVerticalSpeed -= gravity * Time.deltaTime;
             }
+            m_velocity.y = currentVerticalSpeed;
+            // Move the controller
+            m_CharacterController.Move(m_velocity * Time.deltaTime);
 
-            if (!m_CharacterController.isGrounded)
-            {
-                m_velocity.y -= gravity * (Time.fixedDeltaTime)*40;
-            }
-
-            if (isRunning)
+            if (isRunning && m_crouching)
             {
                 m_CharacterController.height = 2.0f;
                 MainCamera.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), Time.deltaTime * crouchSmooth);
@@ -161,8 +149,7 @@ public class Controller : MonoBehaviour
                 }
             }
 
-            // Move the controller
-            m_CharacterController.Move(m_velocity * Time.deltaTime);
+           
 
             // Turn player
             float turnPlayer = Input.GetAxis("Mouse X") * MouseSensitivity;
