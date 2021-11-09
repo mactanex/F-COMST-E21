@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class GrabSystemClass : MonoBehaviour
 {
 
@@ -10,8 +11,11 @@ public class GrabSystemClass : MonoBehaviour
     public Transform slot;
 
     public GameObject Crosshair;
+    public GameObject FlashlightBorderChild;
     public Sprite RedCrossHair;
     public Sprite GreenCrossHair;
+
+    public TooltipSystem TooltipSystem;
     // Reference to the currently held item.
     PickableItem pickedItem;
     
@@ -26,6 +30,7 @@ public class GrabSystemClass : MonoBehaviour
     public GameObject FlashlightBody;
 
     private bool carrying = false;
+    private bool firstTimePickup = true;
     void Start()
     {
         Flashlight.enabled = false;
@@ -44,14 +49,29 @@ public class GrabSystemClass : MonoBehaviour
             if (pickable ||collectable)
             {
                 Crosshair.transform.GetComponent<UnityEngine.UI.Image>().sprite = GreenCrossHair;
+                if(!carrying)
+                {
+                    TooltipSystem.EnableTooltip("Press E to pickup");
+                } else
+                {
+                    TooltipSystem.EnableTooltip();  
+                }
+                
+
+                    
             } else if(!carrying)
             {
                 Crosshair.transform.GetComponent<UnityEngine.UI.Image>().sprite = RedCrossHair;
+                TooltipSystem.DisableTooltip("Press E to pickup");
+
             }
         }
         else if (!carrying)
         {
             Crosshair.transform.GetComponent<UnityEngine.UI.Image>().sprite = RedCrossHair;
+            TooltipSystem.DisableTooltip("Press E to pickup");
+            
+
         }
         // Execute logic only on button pressed
         if (Input.GetKeyDown(KeyCode.E))
@@ -83,6 +103,7 @@ public class GrabSystemClass : MonoBehaviour
                         // Pick it
                         PickItem(pickable);
                         carrying = true;
+                        TooltipSystem.SetTooltipText("Press E to throw");
                     } 
                     if(collectable)
                     {
@@ -96,6 +117,13 @@ public class GrabSystemClass : MonoBehaviour
 
         if (inventory.HasItem(0))
         {
+            if (firstTimePickup)
+            {
+                TooltipSystem.SetTooltipWithTimer(2f, "Press F to use flashligt");
+                FlashlightBorderChild.transform.GetComponent<UnityEngine.UI.Image>().sprite = inventory.GetItem(0).Icon;
+                FlashlightBorderChild.SetActive(true);
+                firstTimePickup = false;
+            }
             FlashlightBody.GetComponent<MeshRenderer>().enabled = Flashlight.enabled;
             if (Input.GetKeyUp(KeyCode.F))
             {
@@ -164,6 +192,7 @@ public class GrabSystemClass : MonoBehaviour
     /// <param name="item">Item.</param>
     private void DropItem(PickableItem item)
     {
+        TooltipSystem.SetTooltipText("Press E to pickup");
         carrying = false;
         // Remove reference
         pickedItem = null;
@@ -172,7 +201,9 @@ public class GrabSystemClass : MonoBehaviour
         // Enable rigidbody
         item.Rb.useGravity = true;
         // Add force to throw item a little bit
-        item.Rb.AddForce(item.transform.forward * 2, ForceMode.VelocityChange);
+        item.Rb.AddForce(transform.forward * 1, ForceMode.VelocityChange);
         
     }
+
+    
 }
