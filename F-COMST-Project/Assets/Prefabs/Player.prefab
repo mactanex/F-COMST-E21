@@ -227,7 +227,7 @@ CharacterController:
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 1
+  m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &1983451311899356164
@@ -343,8 +343,8 @@ MonoBehaviour:
   MouseSensitivity: 25
   PlayerSpeed: 7
   RunningSpeed: 15
-  JumpSpeed: 20
-  gravity: 8
+  JumpSpeed: 8
+  gravity: 14
   crouchSmooth: 10
   Clips: []
   PitchMin: 1
@@ -380,6 +380,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_camera: {fileID: 1983451312579218107}
   slot: {fileID: 2023152093}
+  Crosshair: {fileID: 0}
+  FlashlightBorderChild: {fileID: 0}
+  RedCrossHair: {fileID: 21300000, guid: 08438ca41e4d1a9489d4af27ac0f1552, type: 3}
+  GreenCrossHair: {fileID: 21300000, guid: e0a5909e1659ce444bf4ae969a381603, type: 3}
+  TooltipSystem: {fileID: 0}
   inventory: {fileID: 190531153}
   distance: 3
   smooth: 5
