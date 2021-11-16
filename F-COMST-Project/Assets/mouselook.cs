@@ -36,7 +36,7 @@ public class mouselook : MonoBehaviour
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Locked;   
         }
     }
 }
