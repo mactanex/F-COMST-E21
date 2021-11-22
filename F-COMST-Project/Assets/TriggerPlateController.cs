@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Audio;
 using UnityEngine;
 
 public class TriggerPlateController : MonoBehaviour
 {
     Animator plateAnimator;
+    AudioSource audioSource;
 
     private float totalmass = 0;
     private float desiredWeight = 6;
@@ -16,6 +18,7 @@ public class TriggerPlateController : MonoBehaviour
             totalmass += other.gameObject.GetComponent<Rigidbody>().mass;
             if (totalmass == desiredWeight)
             {
+                audioSource.Play();
                 plateAnimator.SetBool("offPlate", false);
                 plateAnimator.SetBool("onPlate", true);
             }
@@ -44,6 +47,7 @@ public class TriggerPlateController : MonoBehaviour
     void Start()
     {
         plateAnimator = this.transform.parent.GetComponent<Animator>();
+        audioSource = this.transform.parent.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
