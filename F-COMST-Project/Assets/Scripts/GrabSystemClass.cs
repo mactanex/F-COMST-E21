@@ -18,6 +18,7 @@ public class GrabSystemClass : MonoBehaviour
     public TooltipSystem TooltipSystem;
     // Reference to the currently held item.
     PickableItem pickedItem;
+    PickablePuzzleItem pickedPuzzleItem;
     
     // Start is called before the first frame update
     public Inventory inventory;
@@ -45,8 +46,9 @@ public class GrabSystemClass : MonoBehaviour
         {
             var pickable = hit.transform.GetComponent<PickableItem>();
             var collectable = hit.transform.GetComponent<CollectibleItem>();
+            var pickablePuzzle = hit.transform.GetComponent<PickablePuzzleItem>();
 
-            if (pickable ||collectable)
+            if (pickable ||collectable || pickablePuzzle)
             {
                 Crosshair.transform.GetComponent<UnityEngine.UI.Image>().sprite = GreenCrossHair;
                 if(!carrying)
@@ -82,6 +84,11 @@ public class GrabSystemClass : MonoBehaviour
                 // If yes, drop picked item
                 DropItem(pickedItem);
             }
+            if(pickedPuzzleItem)
+            {
+                DropPuzzleItem(pickedPuzzleItem);
+            }
+
             else
             {
                 
@@ -96,6 +103,7 @@ public class GrabSystemClass : MonoBehaviour
                     // Check if object is pickable
                     var pickable = hit.transform.GetComponent<PickableItem>();
                     var collectable = hit.transform.GetComponent<CollectibleItem>();
+                    var pickablePuzzle = hit.transform.GetComponent<PickablePuzzleItem>();
 
                     // If object has PickableItem class
                     if (pickable)
@@ -110,6 +118,12 @@ public class GrabSystemClass : MonoBehaviour
                         CollectItem(collectable);
                     }
                     // If object has collectibleItem class
+                    if (pickablePuzzle)
+                    {
+                        PickPuzzleItem(pickablePuzzle);
+                        carrying = true;
+                        TooltipSystem.SetTooltipText("Press E to let go");
+                    }
 
                 }
             }
@@ -131,13 +145,25 @@ public class GrabSystemClass : MonoBehaviour
                 {
                     DropItem(pickedItem);
                 }
+                if (pickedPuzzleItem)
+                {
+                    DropPuzzleItem(pickedPuzzleItem);
+                }
                 Flashlight.enabled = !Flashlight.enabled;
             }
         }
 
         if (carrying)
         {
-            carryObject(pickedItem.gameObject);
+            if (pickedItem)
+            {
+                carryObject(pickedItem.gameObject);
+            }
+            if(pickedPuzzleItem)
+            {
+                carryObject(pickedPuzzleItem.gameObject);
+            }
+
         }
     }
 
@@ -190,6 +216,19 @@ public class GrabSystemClass : MonoBehaviour
     /// Method for dropping item.
     /// </summary>
     /// <param name="item">Item.</param>
+    /// 
+
+    private void PickPuzzleItem(PickablePuzzleItem puzzleItem)
+    {
+        pickedPuzzleItem = puzzleItem;
+
+        puzzleItem.Rb.useGravity = false;
+
+        if (Flashlight.enabled)
+        {
+            Flashlight.enabled = false;
+        }
+    }
     private void DropItem(PickableItem item)
     {
         TooltipSystem.SetTooltipText("Press E to pickup");
@@ -205,5 +244,16 @@ public class GrabSystemClass : MonoBehaviour
         
     }
 
-    
+    private void DropPuzzleItem(PickablePuzzleItem puzzleItem)
+    {
+        TooltipSystem.SetTooltipText("Press E to pickup");
+        carrying = false;
+        pickedPuzzleItem = null;
+        puzzleItem.Rb.useGravity = true;
+
+        if(puzzleItem.gameObject.tag == "puzzle3")
+        {
+            Debug.Log("Mask puzzle piece");
+        }
+    }
 }
