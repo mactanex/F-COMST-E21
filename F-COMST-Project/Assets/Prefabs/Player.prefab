@@ -340,6 +340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainCamera: {fileID: 1983451312579218107}
   PlayerPosition: {fileID: 1983451311899356218}
+  TEEST: 
   MouseSensitivity: 25
   PlayerSpeed: 7
   RunningSpeed: 15

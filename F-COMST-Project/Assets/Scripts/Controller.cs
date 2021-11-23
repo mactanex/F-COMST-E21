@@ -10,6 +10,7 @@ public class Controller : MonoBehaviour
     [Header("Camera")]
     public Camera MainCamera;
     public Transform PlayerPosition;
+    public string TEEST;
     [Header("Control Settings")]
     public float MouseSensitivity = 25.0f;
     public float PlayerSpeed = 5.0f;
@@ -83,13 +84,14 @@ public class Controller : MonoBehaviour
     void Update()
     {
         Vector3 m_velocity = Vector3.zero;
-        InternalLockUpdate();
         bool wasGrounded = m_Grounded;
         //bool loosedGrounding = false;
         
 
-        if (!m_IsPaused && !LockControl)
+        if (!InGameMenu.GameIsPaused && !ColorPuzzleManager.IsActive())
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             // We are grounded, so recalculate move direction based on axes
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 right = transform.TransformDirection(Vector3.right);
@@ -152,6 +154,7 @@ public class Controller : MonoBehaviour
            
 
             // Turn player
+
             float turnPlayer = Input.GetAxis("Mouse X") * MouseSensitivity;
             m_HorizontalAngle = m_HorizontalAngle + turnPlayer;
 
@@ -177,48 +180,12 @@ public class Controller : MonoBehaviour
             
         }
 
-    }
-
-
-    //controls the locking and unlocking of the mouse
-    private void InternalLockUpdate()
-    {
-        if (Input.GetKeyUp(KeyCode.Escape))
+        else
         {
-            m_IsPaused = true;
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            m_IsPaused = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
-        if (!m_IsPaused)
-        {
-            UnlockCursor();
-        }
-        else if (m_IsPaused)
-        {
-            LockCursor();
-        }
-    }
-
-    private void UnlockCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
-    private void LockCursor()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-    }
-
-    public void DisplayCursor(bool display)
-    {
-        m_IsPaused = display;
-        Cursor.lockState = display ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = display;
     }
 
     public void PlayClip(AudioClip clip, float pitchMin, float pitchMax)
