@@ -244,7 +244,7 @@ public class GrabSystemClass : MonoBehaviour
         
     }
 
-    private void DropPuzzleItem(PickablePuzzleItem puzzleItem)
+    public void DropPuzzleItem(PickablePuzzleItem puzzleItem)
     {
         TooltipSystem.SetTooltipText("Press E to pickup");
         carrying = false;

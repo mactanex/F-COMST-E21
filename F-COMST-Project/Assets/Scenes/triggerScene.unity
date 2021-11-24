@@ -215,7 +215,7 @@ Transform:
   m_GameObject: {fileID: 78835819}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.29, y: -1.11, z: 0.36}
-  m_LocalScale: {x: 6, y: 1, z: 6}
+  m_LocalScale: {x: 4, y: 1, z: 4}
   m_Children:
   - {fileID: 1656999320}
   m_Father: {fileID: 0}
@@ -391,7 +391,7 @@ Transform:
   m_GameObject: {fileID: 626405080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.1, y: -0.019, z: 18.31}
-  m_LocalScale: {x: 0.5, y: 1, z: 0.5}
+  m_LocalScale: {x: 0.5, y: 1.5, z: 0.5}
   m_Children:
   - {fileID: 901616949}
   m_Father: {fileID: 0}
@@ -576,6 +576,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 901616948}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &954939995 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 190531154, guid: ef61ef06647276a4fab84d1d9188d843, type: 3}
+  m_PrefabInstance: {fileID: 536323491}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06728f92971126a468986b06f06410ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1028391049
 GameObject:
   m_ObjectHideFlags: 0
@@ -885,7 +896,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1478730338}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.376, y: -0.377, z: 18.303}
+  m_LocalPosition: {x: 2.81, y: -0.343, z: 18.303}
   m_LocalScale: {x: 0.1, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 0}
@@ -900,7 +911,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1478730338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50f9b1e2684e415439c997488c720dbf, type: 3}
+  m_Script: {fileID: 11500000, guid: dd2d8e21e211ec74789dd75c0ec11fe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!54 &1478730344
@@ -1044,8 +1055,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1522859088}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.704, y: 0.24, z: 0}
-  m_LocalScale: {x: 0.4, y: 1, z: 1}
+  m_LocalPosition: {x: 0.99, y: 0.24, z: 0}
+  m_LocalScale: {x: 2, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 901616949}
   m_RootOrder: 0
@@ -1125,6 +1136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc6db818542fb6e49b66458509a6686b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grabSystem: {fileID: 954939995}
 --- !u!1 &1555692763
 GameObject:
   m_ObjectHideFlags: 0
