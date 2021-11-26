@@ -13,9 +13,10 @@ public class maskTriggerController : MonoBehaviour
     {
         if (other.gameObject.tag == "puzzle3")
         {
+            Debug.Log("Mask is touching trigger");
             if (this.transform.parent.childCount == 1)
             {
-                Debug.Log("Mask is touching trigger");
+                Debug.Log("There is no mask on bust");
                 grabSystem.DropPuzzleItem(other.gameObject.transform.GetComponent<PickablePuzzleItem>());
                 other.gameObject.transform.SetParent(this.transform.parent, true);
                 other.gameObject.transform.rotation = transform.parent.rotation;
