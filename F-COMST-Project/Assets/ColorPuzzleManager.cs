@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class ColorPuzzleManager : MonoBehaviour
 {
     public GameObject Instance;
     
     public bool picked = false;
+    public GameObject pickedObject;
     public Sprite BallColor1;
     public Sprite BallColor2;
     public Sprite BallColor3;
@@ -17,9 +19,9 @@ public class ColorPuzzleManager : MonoBehaviour
     private GameObject m_flask4;
 
     private static bool isActive = false;
-
-    int[,] StartMap = new int[4, 3] { {1,2,0}, { 1, 2, 0}, { 1, 2, 0}, { 1, 2, 3} };
-    int[,] CurrentMap = new int[4, 3];
+    private bool finished = false;
+    private int[,] StartMap = new int[4, 3] { {3,3,0}, { 3, 1, 0}, { 1, 2, 1}, { 2, 2, 0} };
+    private int[,] CurrentMap = new int[4, 3];
     private void Awake()
     {
         
@@ -36,7 +38,7 @@ public class ColorPuzzleManager : MonoBehaviour
         //Debug.Log(map[1, 0]);
         //Debug.Log(map[1, 1]);
         //Debug.Log(map[3, 1]);
-        StartPuzzle();
+        //StartPuzzle();
     }
 
     // Update is called once per frame
@@ -64,6 +66,7 @@ public class ColorPuzzleManager : MonoBehaviour
 
     public void ResetPuzzle()
     {
+        StartMap = new int[4, 3] { { 3, 3, 0 }, { 3, 1, 0 }, { 1, 2, 1 }, { 2, 2, 0 } };
         GenerateMap();
     }
 
@@ -71,18 +74,94 @@ public class ColorPuzzleManager : MonoBehaviour
     {
         return isActive;
     }
+    public bool IsFinished()
+    {
+        return finished;
+    }
+    public int GetColorOfPosition(int row, int column)
+    {
+        return CurrentMap[row, column];
+    }
+
+    public void UpdateColorOfPosition(int o_row, int o_column, int n_row, int n_column, int color)
+    {
+        CurrentMap[o_row, o_column] = 0;
+        CurrentMap[n_row, n_column] = color;
+        
+    }
+
+    private bool CheckCompletion()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            int value = GetColorOfPosition(i, 0);
+            for (int j = 0; j < 3; j++)
+            {
+                if (GetColorOfPosition(i,j) != value)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public void RefreshMap()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            int amountOfBalls = 0;
+            for (int j = 0; j < 3; j++)
+            {
+                amountOfBalls++;
+                string parentName = "Flask" + (i + 1);
+                string childName = "position" + j;
+                if (CurrentMap[i, j] == 0)
+                {
+                    amountOfBalls--;
+                    GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).sprite = null;
+                    GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).color = new Color(1f, 1f, 1f, 0f);
+                }
+                else if (CurrentMap[i, j] == 1)
+                {
+                    GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).sprite = BallColor1;
+                    GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).color = new Color(1f, 1f, 1f, 1f);
+                }
+                else if (CurrentMap[i, j] == 2)
+                {
+                    GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).sprite = BallColor2;
+                    GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).color = new Color(1f, 1f, 1f, 1f);
+                }
+                else if (CurrentMap[i, j] == 3)
+                {
+                    GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).sprite = BallColor3;
+                    GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).color = new Color(1f, 1f, 1f, 1f);
+                }
+                GetChildComponentByName<CP_OnClick>(parentName).row = i;
+                GetChildComponentByName<CP_OnClick>(parentName).m_AmountOfBallse = amountOfBalls;
+            }
+        }
+        if(CheckCompletion())
+        {
+            finished = true;
+            ExitPuzzle();
+        }
+    }
 
     private void GenerateMap()
     {
         
         for (int i = 0; i < 4; i++)
         {
+            
+            int amountOfBalls = 0;
             for (int j = 0; j < 3; j++)
             {
+                amountOfBalls++;
                 string parentName = "Flask" + (i+1);
                 string childName = "position" + j;
                 if (StartMap[i,j] == 0)
                 {
+                    amountOfBalls--;
                     GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).sprite = null;
                     GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).color = new Color(1f, 1f, 1f, 0f);
                 }
@@ -99,6 +178,8 @@ public class ColorPuzzleManager : MonoBehaviour
                     GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).sprite = BallColor3;
                     GetChildComponentByName<UnityEngine.UI.Image>(parentName, childName).color = new Color(1f, 1f, 1f, 1f);
                 }
+                GetChildComponentByName<CP_OnClick>(parentName).row = i;
+                GetChildComponentByName<CP_OnClick>(parentName).m_AmountOfBallse = amountOfBalls;
             }
         }
         CurrentMap = StartMap;

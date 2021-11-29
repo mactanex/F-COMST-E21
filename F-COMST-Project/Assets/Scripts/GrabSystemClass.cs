@@ -26,6 +26,8 @@ public class GrabSystemClass : MonoBehaviour
     public float distance = 10.0f;
     public float smooth = 5.0f;
 
+    public ColorPuzzleManager m_ColorPuzzleManager;
+
     [Header("Flashlight")]
     public Light Flashlight;
     public GameObject FlashlightBody;
@@ -47,17 +49,27 @@ public class GrabSystemClass : MonoBehaviour
             var pickable = hit.transform.GetComponent<PickableItem>();
             var collectable = hit.transform.GetComponent<CollectibleItem>();
             var pickablePuzzle = hit.transform.GetComponent<PickablePuzzleItem>();
-
-            if (pickable ||collectable || pickablePuzzle)
+            var colorPuzzleStarter = hit.transform.GetComponent<ColorPuzzleStarter>();
+ 
+            if (pickable ||collectable || pickablePuzzle|| (colorPuzzleStarter && !m_ColorPuzzleManager.IsFinished()))
             {
                 Crosshair.transform.GetComponent<UnityEngine.UI.Image>().sprite = GreenCrossHair;
-                if(!carrying)
+                if (colorPuzzleStarter)
                 {
-                    TooltipSystem.EnableTooltip("Press E to pickup");
-                } else
-                {
-                    TooltipSystem.EnableTooltip();  
+                    TooltipSystem.EnableTooltip("Press E to interact");
                 }
+                else
+                {
+                    if (!carrying)
+                    {
+                        TooltipSystem.EnableTooltip("Press E to pickup");
+                    }
+                    else
+                    {
+                        TooltipSystem.EnableTooltip();
+                    }
+                }
+                
                 
 
                     
@@ -104,7 +116,11 @@ public class GrabSystemClass : MonoBehaviour
                     var pickable = hit.transform.GetComponent<PickableItem>();
                     var collectable = hit.transform.GetComponent<CollectibleItem>();
                     var pickablePuzzle = hit.transform.GetComponent<PickablePuzzleItem>();
-
+                    var colorPuzzleStarter = hit.transform.GetComponent<ColorPuzzleStarter>();
+                    if (colorPuzzleStarter)
+                    {
+                        StartColorPuzzle();
+                    }
                     // If object has PickableItem class
                     if (pickable)
                     {
@@ -124,6 +140,8 @@ public class GrabSystemClass : MonoBehaviour
                         carrying = true;
                         TooltipSystem.SetTooltipText("Press E to let go");
                     }
+
+
 
                 }
             }
@@ -255,5 +273,10 @@ public class GrabSystemClass : MonoBehaviour
         {
             Debug.Log("Mask puzzle piece");
         }
+    }
+
+    private void StartColorPuzzle()
+    {
+        m_ColorPuzzleManager.StartPuzzle();
     }
 }

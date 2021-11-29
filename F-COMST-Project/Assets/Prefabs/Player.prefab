@@ -389,6 +389,7 @@ MonoBehaviour:
   inventory: {fileID: 190531153}
   distance: 3
   smooth: 5
+  m_ColorPuzzleManager: {fileID: 0}
   Flashlight: {fileID: 269427285}
   FlashlightBody: {fileID: 0}
 --- !u!1 &1983451312579218053
