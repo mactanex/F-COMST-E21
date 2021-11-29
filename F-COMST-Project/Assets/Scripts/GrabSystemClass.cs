@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 public class GrabSystemClass : MonoBehaviour
 {
-
     public Camera m_camera;
     // Reference to the slot for holding picked item.
     public Transform slot;
@@ -188,7 +187,9 @@ public class GrabSystemClass : MonoBehaviour
     private void carryObject(GameObject o)
     {
         o.transform.position = Vector3.Lerp(o.transform.position, m_camera.transform.position + m_camera.transform.forward * distance, Time.deltaTime * smooth);
-        o.transform.rotation = Quaternion.identity;
+        //o.transform.rotation = Quaternion.identity;
+        float playerEuler_y = this.transform.eulerAngles.y-180;
+        o.transform.eulerAngles = new Vector3(0f, playerEuler_y, 0f); //Makes the object always have the same side to the player
     }
     private void CollectItem(CollectibleItem item)
     {
@@ -262,7 +263,7 @@ public class GrabSystemClass : MonoBehaviour
         
     }
 
-    private void DropPuzzleItem(PickablePuzzleItem puzzleItem)
+    public void DropPuzzleItem(PickablePuzzleItem puzzleItem)
     {
         TooltipSystem.SetTooltipText("Press E to pickup");
         carrying = false;
