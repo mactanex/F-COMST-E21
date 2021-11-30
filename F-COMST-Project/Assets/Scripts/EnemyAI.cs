@@ -272,6 +272,7 @@ public class EnemyAI : MonoBehaviour
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ); //flyt enemy til walkpoint
 
+        walkPoint = new Vector3(55f, transform.position.y, 50f);
 
         if (Physics.Raycast(walkPoint, -transform.up, 1f, whatIsGround)) //tjek om walkpoint er indenfor map
         {
