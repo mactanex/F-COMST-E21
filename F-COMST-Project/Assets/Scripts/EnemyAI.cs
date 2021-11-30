@@ -83,7 +83,7 @@ public class EnemyAI : MonoBehaviour
         if (playerInSightRange== false)
         {
             anim.SetBool("IsRunning", true);
-            Patrolling();
+            Patrolling2();
         }
       /*  else if (thinkingFlag == true) 
         {
@@ -110,11 +110,11 @@ public class EnemyAI : MonoBehaviour
 
         //float x = lastPosition.magnitude - transform.position.magnitude;
 
-        if(lastPosition.magnitude - transform.position.magnitude ==0) 
+/*        if(lastPosition.magnitude - transform.position.magnitude ==0) 
         {
             secondCount++;
         }
-        lastPosition = transform.position;
+        lastPosition = transform.position; */
     }
 
 
@@ -153,6 +153,13 @@ public class EnemyAI : MonoBehaviour
         }
     }*/
 
+    private void Patrolling2() 
+    {
+        FixedWalkPoint();
+        agent.SetDestination(walkPoint);
+    }
+
+
     private void Patrolling() 
     {
         if (secondCount >= 90) 
@@ -166,6 +173,7 @@ public class EnemyAI : MonoBehaviour
         if (walkPointSet==false)
         {
             searchWalkPoint();
+
            
         }
 
@@ -205,10 +213,19 @@ public class EnemyAI : MonoBehaviour
             walkPointSet = false;
             count = 0;
         }
-
+        
         
 
     }
+
+
+    public void FixedWalkPoint() 
+    {
+        walkPoint = new Vector3(55f, transform.position.y, 40f);
+    
+    }
+
+
 
     private void searchWalkPoint()
     {
@@ -272,6 +289,7 @@ public class EnemyAI : MonoBehaviour
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ); //flyt enemy til walkpoint
 
+        walkPoint = new Vector3(55f,transform.position.y,50f);
 
         if (Physics.Raycast(walkPoint, -transform.up, 1f, whatIsGround)) //tjek om walkpoint er indenfor map
         {
