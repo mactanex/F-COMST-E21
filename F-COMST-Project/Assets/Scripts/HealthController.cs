@@ -38,8 +38,7 @@ public class HealthController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
-            currentPlayerHealth -= 20;
-            TakeDamage();
+            TakeDamage(20);
         }
         if (startCooldown)
         {
@@ -82,8 +81,10 @@ public class HealthController : MonoBehaviour
         radialGradient.enabled = false;
     }
 
-    public void TakeDamage()
+    public void TakeDamage(float damage)
     {
+        currentPlayerHealth -= damage;
+
         if(currentPlayerHealth >= 0)
         {
             canRegen = false;
