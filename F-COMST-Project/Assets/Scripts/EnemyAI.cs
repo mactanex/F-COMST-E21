@@ -358,7 +358,7 @@ public class EnemyAI : MonoBehaviour
 
     private void AttackPlayer()
     {
-        HC.TakeDamage();
+        HC.TakeDamage(75);
         //agent.isStopped = true;
     }
 
