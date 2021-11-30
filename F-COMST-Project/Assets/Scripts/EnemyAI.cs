@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 //kilde/inspiration: https://www.youtube.com/watch?v=UjkSFoLxesw&ab_channel=Dave%2FGameDevelopment
 
 public class EnemyAI : MonoBehaviour
@@ -10,6 +11,7 @@ public class EnemyAI : MonoBehaviour
     public NavMeshAgent agent; //enemy?
     public Transform player; //player
     private Animator anim;
+    public HealthController HC;
 
     public LayerMask whatIsGround, whatIsPlayer;
 
@@ -58,7 +60,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("PlayerObject").transform; //PlayerObject skal hedde hvad spiller objektet hedder
+        player = GameObject.Find("Player").transform; //PlayerObject skal hedde hvad spiller objektet hedder
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
     }
@@ -73,8 +75,7 @@ public class EnemyAI : MonoBehaviour
      // Update is called once per frame
      void Update()
      {
-         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
+       //  playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         //playerInSightRange = Physics.Raycast(transform.position, transform.forward, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
         // Brain();
@@ -90,13 +91,13 @@ public class EnemyAI : MonoBehaviour
             Thinking();
 
         }*/
-        else if (playerInSightRange == true && playerInAttackRange == false) 
+       /* else if (playerInSightRange == true && playerInAttackRange == false) 
         {
             anim.SetBool("IsRunning", true);
             ChasePlayer();
             playerInSightRange = true;
         }
-        else if (playerInAttackRange == true)
+      /*  else if (playerInAttackRange == true)
         {
             anim.SetBool("IsRunning", true);
             AttackPlayer();
@@ -357,7 +358,8 @@ public class EnemyAI : MonoBehaviour
 
     private void AttackPlayer()
     {
-        agent.isStopped = true;
+        HC.TakeDamage();
+        //agent.isStopped = true;
     }
 
  /*   private void GetCloseToPlayer() 
