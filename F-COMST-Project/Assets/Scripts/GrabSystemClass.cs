@@ -15,6 +15,9 @@ public class GrabSystemClass : MonoBehaviour
     public Sprite GreenCrossHair;
 
     public TooltipSystem TooltipSystem;
+
+    ExplodingCow interActiveCow;
+
     // Reference to the currently held item.
     PickableItem pickedItem;
     PickablePuzzleItem pickedPuzzleItem;
@@ -45,17 +48,22 @@ public class GrabSystemClass : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 3f))
         {
+            var explodableCow = hit.transform.GetComponent<ExplodingCow>();
             var pickable = hit.transform.GetComponent<PickableItem>();
             var collectable = hit.transform.GetComponent<CollectibleItem>();
             var pickablePuzzle = hit.transform.GetComponent<PickablePuzzleItem>();
             var colorPuzzleStarter = hit.transform.GetComponent<ColorPuzzleStarter>();
  
-            if (pickable ||collectable || pickablePuzzle|| (colorPuzzleStarter && !m_ColorPuzzleManager.IsFinished()))
+            if (pickable ||collectable || pickablePuzzle|| (colorPuzzleStarter && !m_ColorPuzzleManager.IsFinished()) || explodableCow)
             {
                 Crosshair.transform.GetComponent<UnityEngine.UI.Image>().sprite = GreenCrossHair;
                 if (colorPuzzleStarter)
                 {
                     TooltipSystem.EnableTooltip("Press E to interact");
+                }
+                if (explodableCow)
+                {
+                    TooltipSystem.EnableTooltip("Wonder what happens if i press E?");
                 }
                 else
                 {
@@ -112,6 +120,7 @@ public class GrabSystemClass : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, 3f))
                 {
                     // Check if object is pickable
+                    var explodableCow = hit.transform.GetComponent<ExplodingCow>();
                     var pickable = hit.transform.GetComponent<PickableItem>();
                     var collectable = hit.transform.GetComponent<CollectibleItem>();
                     var pickablePuzzle = hit.transform.GetComponent<PickablePuzzleItem>();
@@ -139,7 +148,10 @@ public class GrabSystemClass : MonoBehaviour
                         carrying = true;
                         TooltipSystem.SetTooltipText("Press E to let go");
                     }
-
+                    if (explodableCow)
+                    {
+                        Debug.Log("You have pressed a explosive cow");
+                    }
 
 
                 }
