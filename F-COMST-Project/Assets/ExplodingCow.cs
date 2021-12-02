@@ -41,7 +41,7 @@ public class ExplodingCow : MonoBehaviour
     private IEnumerator delayedexplosion()
     {
        //  GetComponent<AudioSource>().Play();
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2.4f);
 
         explosion.GetComponent<TraumaInducer>().play();
 

@@ -15,15 +15,18 @@ public class SuccessLightsource : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.I))
+    }
+
+
+    public void changecolorsuccess()
+    {
+        if (source.color == Color.red)
         {
-            if(source.color == Color.red)
-            {
-                source.color = Color.green;
-            } else
-            {
-                source.color = Color.red;
-            }
+            source.color = Color.green;
+        }
+        else
+        {
+            source.color = Color.red;
         }
     }
 }

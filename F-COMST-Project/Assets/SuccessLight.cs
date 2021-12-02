@@ -20,19 +20,19 @@ public class SuccessLight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.I) )
+    }
+
+    public void lightsuccess()
+    {
+        if (renderer.material.color == Color.red)
         {
-            if(renderer.material.color == Color.red)
-            {
-                renderer.material.SetColor("_EmissionColor", Color.green);
-                renderer.material.color = Color.green;
-            } else
-            {
-                renderer.material.SetColor("_EmissionColor", Color.red);
-                renderer.material.color = Color.red;
-            }
-            
+            renderer.material.SetColor("_EmissionColor", Color.green);
+            renderer.material.color = Color.green;
         }
-        
+        else
+        {
+            renderer.material.SetColor("_EmissionColor", Color.red);
+            renderer.material.color = Color.red;
+        }
     }
 }
