@@ -23,8 +23,28 @@ public class ExplodingCow : MonoBehaviour
 
     public void explodeCow()
     {
-        explosion.GetComponent<TraumaInducer>().play();
+
         GetComponent<AudioSource>().Play();
+        StartCoroutine(delayedexplosion());
+        // yield return new WaitForSeconds(2f);
+
+        // explosion.GetComponent<TraumaInducer>().play();
+
+        // explosion.GetComponent<ParticleSystem>().Play();
+        // Instantiate(explosion, explosion.transform.position, explosion.transform.rotation);
+        // Destroy(cow);
+        // cow.GetComponent<MeshRenderer>().enabled = false;
+        // cow.GetComponent<MeshCollider>().enabled = false;
+
+    }
+
+    private IEnumerator delayedexplosion()
+    {
+       //  GetComponent<AudioSource>().Play();
+        yield return new WaitForSeconds(2f);
+
+        explosion.GetComponent<TraumaInducer>().play();
+
         explosion.GetComponent<ParticleSystem>().Play();
         // Instantiate(explosion, explosion.transform.position, explosion.transform.rotation);
         // Destroy(cow);
