@@ -24,31 +24,36 @@ public class tvNoise : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            var materials = renderer.sharedMaterials;
-
-            if (string.Equals(materials[1].name, "YourPic"))
-            {
-                source.clip = audioclips[0];
-                source.loop = true;
-                source.Play();
-                materials[1] = staticNoise;
-            }
-
-            else if (string.Equals(materials[1].name, "tvNoise"))
-            {
-                source.Stop();
-                source.clip = audioclips[1];
-                source.loop = false;
-                materials[1] = JumpScare;
-                source.Play();
-            }
-
-            else if (string.Equals(materials[1].name, "jumpScare"))
-            {
-                materials[1] = blankScrene;
-            }
-
-            renderer.sharedMaterials = materials;
+            interactWithTv();
         }
+    }
+
+    public void interactWithTv()
+    {
+        var materials = renderer.sharedMaterials;
+
+        if (string.Equals(materials[1].name, "YourPic"))
+        {
+            source.clip = audioclips[0];
+            source.loop = true;
+            source.Play();
+            materials[1] = staticNoise;
+        }
+
+        else if (string.Equals(materials[1].name, "tvNoise"))
+        {
+            source.Stop();
+            source.clip = audioclips[1];
+            source.loop = false;
+            materials[1] = JumpScare;
+            source.Play();
+        }
+
+        else if (string.Equals(materials[1].name, "jumpScare"))
+        {
+            materials[1] = blankScrene;
+        }
+
+        renderer.sharedMaterials = materials;
     }
 }
