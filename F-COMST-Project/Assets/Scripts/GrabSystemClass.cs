@@ -150,7 +150,8 @@ public class GrabSystemClass : MonoBehaviour
                     }
                     if (explodableCow)
                     {
-                        Debug.Log("You have pressed a explosive cow");
+                        explodableCow.explodeCow();
+                        
                     }
 
 
