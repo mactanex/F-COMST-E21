@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    
     public Sound[] sounds;
 
     public static AudioManager instance;
@@ -33,14 +32,21 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void Play (string name)
+    public static void Play (string name)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
+        Sound s = Array.Find(instance.sounds, sound => sound.name == name);
         if (s == null)
         {
             Debug.LogWarning("Sound" + name + "not found");
             return;
         }
         s.source.Play();
+    }
+
+    public static AudioSource GetSource(string name)
+    {
+        Sound s = Array.Find(instance.sounds, sound => sound.name == name);
+        
+        return s.source;
     }
 }
