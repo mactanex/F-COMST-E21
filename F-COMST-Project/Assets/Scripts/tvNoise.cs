@@ -6,6 +6,7 @@ public class tvNoise : MonoBehaviour
 {
 
     MeshRenderer renderer;
+    AudioSource source;
     public Material blankScrene;
     public Material staticNoise;
     public Material JumpScare;
