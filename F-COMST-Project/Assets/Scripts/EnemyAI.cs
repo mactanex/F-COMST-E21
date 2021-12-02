@@ -26,31 +26,18 @@ public class EnemyAI : MonoBehaviour
     public bool xBackward;
     public bool zBackward;
     public bool stuckFlag;
-   // public bool longTime;
     public float walkPointRange;
     public int count;
     public int secondCount;
     public int thirdCount;
-    /*public int fourthCount;
-    public int sixthCount;*/
-    //attacking
+    public bool[] Path;
+
+    
 
 
 
 
- /*    //Brain
-    public int bCount1;
-    public int bCount2;
-    public int bCount3;
-    public int bCount4;
-    public bool RecognisePath;
-    public bool RecogniseRoom;
-    public bool thinkingFlag = false;
-    public Vector3 HalfExtent =new Vector3(10f,0.1f,10f);
-    //public Quaternion Orientation = new Quaternion();
-    //get close to player
-    public int fifthCount;*/
-  
+
 
     //states
 
@@ -63,35 +50,34 @@ public class EnemyAI : MonoBehaviour
         player = GameObject.Find("Player").transform; //PlayerObject skal hedde hvad spiller objektet hedder
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
+      
     }
 
     // Start is called before the first frame update
         void Start()
      {
         //agent.autoBraking = false; //skal måske fjernes
+        walkPoint = new Vector3(26 + 8.74f, transform.position.y, 0 + 10.07f); //walkpoint 10 ,  starter her
+        agent.SetDestination(walkPoint);
 
-     }
+        Path = new bool[11];
+
+    }
 
      // Update is called once per frame
      void Update()
      {
-       //  playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
+         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         //playerInSightRange = Physics.Raycast(transform.position, transform.forward, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
-        // Brain();
+       
 
         if (playerInSightRange== false)
         {
             anim.SetBool("IsRunning", true);
             Patrolling2();
         }
-      /*  else if (thinkingFlag == true) 
-        {
-            anim.SetBool("IsRunning", false);
-            Thinking();
-
-        }*/
-       /* else if (playerInSightRange == true && playerInAttackRange == false) 
+        else if (playerInSightRange == true && playerInAttackRange == false) 
         {
             anim.SetBool("IsRunning", true);
             ChasePlayer();
@@ -118,49 +104,27 @@ public class EnemyAI : MonoBehaviour
     }
 
 
-   /* private void Brain() //do smart things like not take same path twice etc.
-    {
-
-        // var newPath = Physics.CheckSphere;
-
-        if (RecognisePath = Physics.Raycast(transform.position, transform.forward, 5f, whatIsObstacle) == true)
-            bCount1++;
-
-        if (RecogniseRoom = Physics.CheckBox(transform.position,HalfExtent,Quaternion.identity,whatIsObstacle) == true)
-            bCount2++;
-
-        if (bCount1 >= 30 && bCount2 >= 30)
-        {
-            thinkingFlag = true;
-            bCount1 = 0;
-            bCount2 = 0;
-        }
-            
-        
-    }*/
-
-   /* private void Thinking() 
-    {
-        agent.isStopped = true;
-        transform.Rotate(transform.right, 5);
-        bCount3++;
-
-        if (bCount3 >= 300) 
-        {
-            bCount3 = 0;
-            thinkingFlag = false;
-            agent.isStopped = false;
-        }
-    }*/
+  
 
     private void Patrolling2() 
     {
-        FixedWalkPoint();
+
+      //  Debug.Log("it doesnt work");
+
+        if (Vector3.Distance(transform.position,walkPoint) <=1) //tjek om destination er nået
+        {
+           
+            Debug.Log("it works");
+            FixedWalkPoint();
+        }
+
         agent.SetDestination(walkPoint);
+
+
     }
 
 
-    private void Patrolling() 
+  /*  private void Patrolling() 
     {
         if (secondCount >= 90) 
         {
@@ -192,7 +156,7 @@ public class EnemyAI : MonoBehaviour
         {
            // longTime = true;
             fourthCount = 0;
-        }*/
+        }
        
          Vector3 distanceToWalkPoint = transform.position - walkPoint; //tjek om walkpoint er indenfor en realistisk distance
         if (distanceToWalkPoint.magnitude < 1f) //hvis ikke lav et nyt walkpoint
@@ -218,16 +182,367 @@ public class EnemyAI : MonoBehaviour
 
     }
 
+        */
 
     public void FixedWalkPoint() 
     {
-        walkPoint = new Vector3(55f, transform.position.y, 40f);
-    
+        if(transform.position.x >= 30) //ved walkpoint 10
+        {
+            key = 1;
+            Debug.Log("walkpoint 10/" + Path.Length);
+            MakeBoolFalse();
+            Path[10] = true;
+        }
+
+        //random.range(min,max), er max ikke inkluderet
+
+        else if (transform.position.x >= 0 && transform.position.z <=20 && transform.position.z >=0) //ved walkpoint 1
+        {
+            Debug.Log("doesnt work");
+            if (Path[10] == true)
+            {
+                Debug.Log("path(10) is true");
+                while (key != 2 && key!=4)
+                {
+                    key = Random.Range(2, 5);
+                }
+
+                Debug.Log("key is=" + key);
+            }
+            else if (Path[2] == true)
+            {
+                key = Random.Range(3, 5);
+            }
+            else if (Path[9] == true)
+            {
+                key = Random.Range(2, 4);
+            }
+            else
+            {
+
+                key = Random.Range(2, 5);
+                Debug.Log(key);
+                Debug.Log("walkpoint 1/" + key);
+
+            }
+            MakeBoolFalse();
+            Path[1] = true;
+        }
+
+        else if (transform.position.x >= 0 &&  transform.position.z >= 30) //ved walkpoint 2
+        {
+            
+            if (Path[1] == true)
+            {
+                key = 5;
+            }
+            else if (Path[3] == true)
+            {
+                key = 1;
+            }
+            else
+            {
+                while (key != 1 && key != 5)
+                {
+                    key = Random.Range(1, 6);
+                }
+            }
+          
+            Debug.Log("walkpoint 2/" + key);
+
+            MakeBoolFalse();
+            Path[2] = true;
+        }
+
+        else if (transform.position.x <= 0 && transform.position.x >= -20 && transform.position.z >= 30) //ved walkpoint 3
+        {
+
+      
+
+            if (Path[2] == true)
+            {
+                key = Random.Range(6, 8);
+               
+            }
+            else if (Path[5] == true)
+            {
+                while (key != 2 && key != 6)
+                {
+                    key = Random.Range(2, 7);
+                }
+             
+            }
+            else if (Path[4] == true)
+            {
+                while (key != 2 && key != 7)
+                {
+                    key = Random.Range(2, 8);
+                }
+             
+
+            }
+            else
+            {
+
+                while (key != 2 && key != 7 && key != 6)
+                {
+                    key = Random.Range(2, 8);
+                }
+            }
+
+
+            Debug.Log("walkpoint 3/" + key);
+            MakeBoolFalse();
+            Path[3] = true;
+        }
+        else if (transform.position.x <= -30 && transform.position.z >= 30) //ved walkpoint 5
+        {
+
+            if (Path[3] == true)
+            {
+                key = 8;
+            }
+            
+            else if (Path[6] == true)
+            {
+                key = 5;
+            }
+
+            else
+            {
+                while (key != 5 && key != 8)
+                {
+                    key = Random.Range(5, 9);
+                }
+            }
+
+            Debug.Log("why does it fuck up here=" + key);
+            Debug.Log("walkpoint 5/" + key);
+
+            MakeBoolFalse();
+            Path[5] = true;
+        }
+        else if (transform.position.x <= -30 && transform.position.z <= 30 && transform.position.z >= 0) //ved walkpoint 6
+        {
+            if (Path[5] == true)
+            {
+                while (key != 6 && key != 9)
+                {
+                    key = Random.Range(6, 10);
+                }
+            }
+
+            else if (Path[7] == true)
+            {
+                while (key != 6 && key != 7)
+                {
+                    key = Random.Range(6, 10);
+                }
+
+            }
+            else if (Path[4])
+            {
+                while (key != 7 && key != 9)
+                {
+                    key = Random.Range(6, 10);
+                }
+
+            }
+            else
+            {
+                while (key == 8)
+                {
+                    key = Random.Range(6, 10);
+                }
+            }
+            Debug.Log("walkpoint 6/" + key);
+
+            MakeBoolFalse();
+            Path[6] = true;
+        }
+
+        else if (transform.position.x <= -30 && transform.position.z <= 0) //ved walkpoint 7
+        {
+            if (Path[6] == true)
+            {
+                key = 10;
+            }
+            else if (Path[8] == true)
+            {
+                key = 8;
+            }
+
+            else
+            {
+                while (key == 9)
+                {
+                    key = Random.Range(8, 11);
+                }
+            }
+            Debug.Log("walkpoint 7/" + key);
+            MakeBoolFalse();
+            Path[7] = true;
+        }
+        else if (transform.position.x >= -30 && transform.position.x <= 0 && transform.position.z <= 0) //ved walkpoint 8
+        {
+            if (Path[7] == true)
+            {
+                while (key != 4 && key != 6)
+                {
+                    key = Random.Range(4, 7);
+                }
+
+            }
+            else if (Path[9] == true)
+            {
+                while (key != 6 && key != 9)
+                {
+                    key = Random.Range(6, 10);
+                }
+
+            }
+            else if (Path[4] == true)
+            {
+                while (key != 4 && key != 9)
+                {
+                    key = Random.Range(4, 10);
+                }
+
+            }
+            else
+            {
+
+                while (key != 4 && key != 6 && key != 9)
+                {
+                    key = Random.Range(4, 10);
+                }
+            }
+            Debug.Log("walkpoint 8/" + key);
+            MakeBoolFalse();
+            Path[8] = true;
+        }
+
+        else if (transform.position.x >= 0 && transform.position.z <= 0) //ved walkpoint 9
+        {
+            if (Path[8] == true)
+            {
+                key = 1;
+            }
+            else if (Path[1] == true)
+            {
+                key = 10;
+            }
+            else
+            {
+                key = Random.Range(1, 11);
+                if (key >= 6)
+                {
+                    key = 10;
+                }
+                else
+                {
+                    key = 1;
+                }
+            }
+            Debug.Log("walkpoint 9/" + key);
+            MakeBoolFalse();
+            Path[9] = true;
+        }
+
+        else if (transform.position.x <= 0 && transform.position.x >= -30 && transform.position.z >= 0 && transform.position.z <= 30) //ved walkpoint 4
+        {
+            if (Path[3] == true)
+            {
+                while (key != 8 && key != 10)
+                {
+                    key = Random.Range(8, 11);
+                }
+
+            }
+            else if (Path[6] == true)
+            {
+                while (key != 5 && key != 10)
+                {
+                    key = Random.Range(5, 11);
+                }
+
+            }
+            else if (Path[8] == true)
+            {
+                while (key != 5 && key != 8)
+                {
+                    key = Random.Range(5, 9);
+                }
+
+            }
+            else
+            {
+                while (key != 5 && key != 8 && key != 10)
+                {
+                    key = Random.Range(5, 11);
+                }
+            }
+            Debug.Log("walkpoint 4/" + key);
+            MakeBoolFalse();
+            Path[4] = true;
+
+        }
+
+
+
+       
+
+
+        switch (key)
+        {
+            case 1:
+                walkPoint = new Vector3(0 + 8.74f, transform.position.y, 0 + 10.07f); //hen til walkpoint 1
+                break;
+            case 2:
+                walkPoint = new Vector3(0 + 8.74f, transform.position.y, 33 + 10.07f); // hen til walkpoint 2
+                break;
+            case 3:
+                walkPoint = new Vector3(26 + 8.74f, transform.position.y, 0 + 10.07f); //hen til walkpoint 10
+                break;
+            case 4:
+                walkPoint = new Vector3(0 + 8.74f, transform.position.y, -29 + 10.07f); //hen til walkpoint 9
+                break;
+            case 5:
+                walkPoint = new Vector3(-16 + 8.74f, transform.position.y, 33 + 10.07f); //hen til walkpoint 3
+                break;
+            case 6:
+                walkPoint = new Vector3(-15 + 8.74f, transform.position.y, 2.5f + 10.07f); //hen til walkpoint 4
+                break;
+            case 7:
+                walkPoint = new Vector3(-46 + 8.74f, transform.position.y, 33 + 10.07f); //hen til walkpoint 5
+                break;
+            case 8:
+                walkPoint = new Vector3(-46 + 8.74f, transform.position.y, 0 + 10.07f); //hen til walkpoint 6
+                break;
+            case 9:
+                walkPoint = new Vector3(-46 + 8.74f, transform.position.y, -29 + 10.07f); //hen til walkpoint 7
+                break;
+            case 10:
+                walkPoint = new Vector3(-15.5f + 8.74f, transform.position.y, -27 + 10.07f); //hen til walkpoint 8
+                break;
+            default:
+                walkPoint = new Vector3(-15 + 8.74f, transform.position.y, 2.5f + 10.07f); //hen til walkpoint 4
+                break;
+        }
+
     }
 
 
+    public void MakeBoolFalse() 
+    {
 
-    private void searchWalkPoint()
+        for(int i=0; i < Path.Length-1; i++) 
+        {
+            Path[i] = false;
+        }
+    }
+
+ /*   private void searchWalkPoint()
     {
 
          float randomZ, randomX;
@@ -366,7 +681,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         return key;
-    }
+    }*/
 
     private void ChasePlayer()
     {
@@ -380,31 +695,5 @@ public class EnemyAI : MonoBehaviour
         //agent.isStopped = true;
     }
 
- /*   private void GetCloseToPlayer() 
-    {
-        float x;
-        float y = 0;
-        float z;
-        
-        if (player.position.x >= 0)
-            x = 5;
-        else
-            x = -5;
-
-        if (player.position.z >= 0)
-            z = 5;
-        else
-            z = -5;
-
-        agent.SetDestination(player.position + new Vector3(x,y,z));
-        fifthCount++;
-         
-        if(fifthCount >= 900) 
-        {
-            longTime = false;
-            fifthCount = 0;
-        }
-    }*/
-  
 
 }
