@@ -44,8 +44,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - name: Fart
-    clip: {fileID: 8300000, guid: 6a64e11f47aa8c149a237ad6e5b51170, type: 3}
+  - name: music
+    clip: {fileID: 8300000, guid: 0728bdf6bf2588442bc489252d5eeb92, type: 3}
+    volume: 0.109
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Jump
+    clip: {fileID: 8300000, guid: dc0f7110428091942897a82531997b53, type: 3}
+    volume: 1
+    pitch: 1.1
+    loop: 0
+    source: {fileID: 0}
+  - name: Land
+    clip: {fileID: 8300000, guid: 220d31ecad78e69439a84c70847638ac, type: 3}
     volume: 1
     pitch: 1
     loop: 0
