@@ -10,6 +10,8 @@ public class ExplodingCow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        explosion = GameObject.Find("BigExplosion");
+        cow = GameObject.Find("CowBlW");
     }
 
 
