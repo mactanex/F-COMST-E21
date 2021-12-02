@@ -62,3 +62,15 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: Success
+    clip: {fileID: 8300000, guid: 2db96fbf558f19944b15126dfa80f52e, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SuccessFinal
+    clip: {fileID: 8300000, guid: d7f509ac8a374d14fa0e6b1a9b6cae62, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
