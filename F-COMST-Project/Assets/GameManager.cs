@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public ExplodingCow explodingCow;
     public GameObject GHOUL;
     public int seconds = 0;
-    int i = 0;
+    int i = 2;
     void Awake()
     {
         if (Instance == null)
@@ -50,16 +50,15 @@ public class GameManager : MonoBehaviour
                 AudioManager.Play("Success");
                 break;
             case 2:
-                LowerRightN.SetActive(true);
-                AudioManager.Play("Success");
+                StartCoroutine(FinishPuzzle2());
                 break;
             case 3:
                 HigherLeftN.SetActive(true);
                 AudioManager.Play("Success");
                 break;
             case 4:
-                HigherRightN.SetActive(true);
-                AudioManager.Play("SuccessFinal");
+                StartCoroutine(SuccesFinalAnim());
+                
                 break;
             default:
                 break;
@@ -71,11 +70,12 @@ public class GameManager : MonoBehaviour
         }
         if (Instance.i == 3)
         {
-            AudioManager.Play("MOOO");
+            AudioManager.DelayAndPlay("MOOO",5.5f);
             Instance.explodingCow.EnableCow();
         }
         if(Instance.i == 4)
         {
+            GHOUL.SetActive(false);
             StartCoroutine(Finish());
         }
     }
@@ -100,11 +100,23 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Finish()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(3);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        }
+        yield return new WaitForSeconds(6f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
+    }
+
+    IEnumerator FinishPuzzle2()
+    {
+        yield return new WaitForSeconds(2.5f);
+        LowerRightN.SetActive(true);
+        AudioManager.Play("Success");
+    }
+
+    IEnumerator SuccesFinalAnim()
+    {
+        yield return new WaitForSeconds(1.5f);
+        HigherRightN.SetActive(true);
+        AudioManager.Play("SuccessFinal");
     }
     void timeCount()
     {
