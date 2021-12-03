@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Audio;
 using System;
 using UnityEngine;
@@ -40,6 +42,28 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("Sound" + name + "not found");
             return;
         }
+        s.source.Play();
+    }
+
+    public static void DelayAndPlay(string name, float time)
+    {
+        instance.PlayWithDelay(name, time);
+    }
+
+    private void PlayWithDelay(string name, float time)
+    {
+        Sound s = Array.Find(instance.sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Sound" + name + "not found");
+            return;
+        }
+        StartCoroutine(DelayedPlay(time, s));
+    }
+
+    private IEnumerator DelayedPlay(float time, Sound s)
+    {
+        yield return new WaitForSeconds(time);
         s.source.Play();
     }
 
