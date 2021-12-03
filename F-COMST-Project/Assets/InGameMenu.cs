@@ -6,9 +6,12 @@ using UnityEngine.SceneManagement;
 public class InGameMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
-
+    
     public GameObject InGameMenuUI;
-
+    private void Start()
+    {
+        GameIsPaused = false;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -44,8 +47,11 @@ public class InGameMenu : MonoBehaviour
     {
         Debug.Log("Loading start menu");
         Time.timeScale = 1F;
+        GameIsPaused = false;
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
+
 
 
 }

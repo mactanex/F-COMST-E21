@@ -10,7 +10,6 @@ public class Controller : MonoBehaviour
     [Header("Camera")]
     public Camera MainCamera;
     public Transform PlayerPosition;
-    public string TEEST;
     [Header("Control Settings")]
     public float MouseSensitivity = 25.0f;
     public float PlayerSpeed = 5.0f;

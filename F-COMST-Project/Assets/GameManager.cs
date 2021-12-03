@@ -10,8 +10,10 @@ public class GameManager : MonoBehaviour
     public GameObject HigherLeftN;
     public GameObject HigherRightN;
 
+    public ExplodingCow explodingCow;
+
     public int seconds = 0;
-    int i = 1;
+    int i = 0;
     void Awake()
     {
         if (Instance == null)
@@ -23,10 +25,10 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
-        // Start is called before the first frame update
-        void Start()
+    // Start is called before the first frame update
+    void Start()
     {
         //AudioManager.Play("music");
         StartCoroutine(time());
@@ -35,12 +37,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            
-            FinishPuzzle(i);
-                
-        }
+
     }
 
     public void FinishPuzzle(int key)
@@ -67,6 +64,16 @@ public class GameManager : MonoBehaviour
                 break;
         }
         i++;
+        if (Instance.i == 3)
+        {
+            AudioManager.Play("MOOO");
+            Instance.explodingCow.EnableCow();
+        }
+    }
+
+    public static void FinishPuzzleStatic(int key)
+    {
+        Instance.FinishPuzzle(key);
     }
     public static int GetSeconds()
     {
@@ -86,14 +93,4 @@ public class GameManager : MonoBehaviour
         seconds += 1;
     }
 
-    public static bool ActivateCow()
-    {
-        if (Instance.i == 3)
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
-    }
 }

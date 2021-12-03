@@ -4,32 +4,38 @@ using UnityEngine;
 
 public class puzzle3Script : MonoBehaviour
 {
-
+    private bool isFinished = false;
     CeasarBust[] ceasarBustList;
     
     public void CheckMasks()
     {
-        foreach(CeasarBust cb in ceasarBustList)
+        if (!isFinished)
         {
-            if (cb.IsMaskOn())
+            foreach (CeasarBust cb in ceasarBustList)
             {
-                if (cb.CheckMask())
+                if (cb.IsMaskOn())
                 {
-                    Debug.Log("Correct Mask");
+                    if (cb.CheckMask())
+                    {
+                        Debug.Log("Correct Mask");
+                    }
+                    else
+                    {
+                        Debug.Log("Not all mask where correct");
+                        return;
+                    }
                 }
                 else
                 {
-                    Debug.Log("Not all mask where correct");
+                    Debug.Log("Not All bust have a mask");
                     return;
                 }
             }
-            else
-            {
-                Debug.Log("Not All bust have a mask");
-                return;
-            }
+            Debug.Log("All masks where correct");
+            isFinished = true;
+            GameManager.FinishPuzzleStatic(3);
         }
-        Debug.Log("All masks where correct");
+        
     }
 
     // Start is called before the first frame update

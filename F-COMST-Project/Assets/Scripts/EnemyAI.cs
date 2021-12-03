@@ -83,7 +83,7 @@ public class EnemyAI : MonoBehaviour
             ChasePlayer();
             playerInSightRange = true;
         }
-      /*  else if (playerInAttackRange == true)
+        else if (playerInAttackRange == true)
         {
             anim.SetBool("IsRunning", true);
             AttackPlayer();

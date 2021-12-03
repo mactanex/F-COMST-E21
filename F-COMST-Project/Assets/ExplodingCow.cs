@@ -12,6 +12,8 @@ public class ExplodingCow : MonoBehaviour
     {
         explosion = GameObject.Find("BigExplosion");
         cow = GameObject.Find("CowBlW");
+        cow.GetComponent<MeshRenderer>().enabled = false;
+        cow.GetComponent<MeshCollider>().enabled = false;
     }
 
 
@@ -19,6 +21,12 @@ public class ExplodingCow : MonoBehaviour
     void Update()
     {
      
+    }
+
+    public void EnableCow()
+    {
+        cow.GetComponent<MeshRenderer>().enabled = true;
+        cow.GetComponent<MeshCollider>().enabled = true;
     }
 
     public void explodeCow()
@@ -50,5 +58,6 @@ public class ExplodingCow : MonoBehaviour
         // Destroy(cow);
         cow.GetComponent<MeshRenderer>().enabled = false;
         cow.GetComponent<MeshCollider>().enabled = false;
+        GameManager.FinishPuzzleStatic(4);
     }
 }

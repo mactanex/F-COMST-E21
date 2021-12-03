@@ -22,6 +22,8 @@ public class ColorPuzzleManager : MonoBehaviour
     private bool finished = false;
     private int[,] StartMap = new int[4, 3] { {3,3,0}, { 3, 1, 0}, { 1, 2, 1}, { 2, 2, 0} };
     private int[,] CurrentMap = new int[4, 3];
+    public SuccessLightsource successLight;
+    public SuccessLight successLightBody;
     private void Awake()
     {
         
@@ -143,6 +145,9 @@ public class ColorPuzzleManager : MonoBehaviour
         if(CheckCompletion())
         {
             finished = true;
+            GameManager.FinishPuzzleStatic(1);
+            successLight.changecolorsuccess();
+            successLightBody.lightsuccess();
             ExitPuzzle();
         }
     }

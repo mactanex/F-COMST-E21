@@ -22,16 +22,14 @@ public class HealthController : MonoBehaviour
     [Header("Health timer")]
     [SerializeField] private float healCooldown = 3.0f;
     [SerializeField] private float maxHealCooldown = 3.0f;
-    [SerializeField] private bool startCooldown = false; 
+    [SerializeField] private bool startCooldown = false;
 
-    [Header("Audio Name")]
-    [SerializeField] private AudioClip damageAudio = null;
-    private AudioSource healtControllerAudioSource; 
+    public GameOverScript GameOverScreen;
+    public Camera Camera;
 
     // Start is called before the first frame update
     void Start()
     {
-        healtControllerAudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -39,7 +37,11 @@ public class HealthController : MonoBehaviour
     {
         if(currentPlayerHealth <= 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            Camera.GetComponent<Animator>().SetBool("Death", true);
+            Cursor.lockState = CursorLockMode.None;
+            InGameMenu.GameIsPaused = true;
+            StartCoroutine(GameOver());
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         if (Input.GetKeyDown(KeyCode.V))
@@ -82,9 +84,9 @@ public class HealthController : MonoBehaviour
     IEnumerator DamageFlash()
     {
         radialGradient.enabled = true;
-        healtControllerAudioSource.PlayOneShot(damageAudio);
         yield return new WaitForSeconds(hurtTimer);
         radialGradient.enabled = false;
+        AudioManager.Play("Hurt");
     }
 
     public void TakeDamage(float damage)
@@ -99,5 +101,11 @@ public class HealthController : MonoBehaviour
             healCooldown = maxHealCooldown;
             startCooldown = true;
         }
+    }
+
+    IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(1);
+        GameOverScreen.GameOver();
     }
 }

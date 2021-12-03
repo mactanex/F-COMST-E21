@@ -9,37 +9,46 @@ public class TriggerPlateController : MonoBehaviour
     AudioSource audioSource;
 
     private float totalmass = 0;
-    private float desiredWeight = 6;
-
+    public float desiredWeight = 12.5f;
+    private bool isFinished = false;
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "puzzle2")
+        if (!isFinished)
         {
-            totalmass += other.gameObject.GetComponent<Rigidbody>().mass;
-            if (totalmass == desiredWeight)
+            if (other.gameObject.tag == "puzzle2")
             {
-                audioSource.Play();
-                plateAnimator.SetBool("offPlate", false);
-                plateAnimator.SetBool("onPlate", true);
+                totalmass += other.gameObject.GetComponent<Rigidbody>().mass;
+                if (totalmass == desiredWeight)
+                {
+                    isFinished = true;
+                    audioSource.Play();
+                    GameManager.FinishPuzzleStatic(2);
+                    plateAnimator.SetBool("offPlate", false);
+                    plateAnimator.SetBool("onPlate", true);
+                }
+                Debug.Log("cube entered trigger");
+                Debug.Log(totalmass);
             }
-            Debug.Log("cube entered trigger");
-            Debug.Log(totalmass);
         }
+       
 
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "puzzle2")
+        if (!isFinished)
         {
-            totalmass -= other.gameObject.GetComponent<Rigidbody>().mass;
-            if (totalmass != desiredWeight)
+            if (other.gameObject.tag == "puzzle2")
             {
-                plateAnimator.SetBool("offPlate", true);
-                plateAnimator.SetBool("onPlate", false);
+                totalmass -= other.gameObject.GetComponent<Rigidbody>().mass;
+                if (totalmass != desiredWeight)
+                {
+                    plateAnimator.SetBool("offPlate", true);
+                    plateAnimator.SetBool("onPlate", false);
+                }
+                Debug.Log("cube left trigger");
+                Debug.Log(totalmass);
             }
-            Debug.Log("cube left trigger");
-            Debug.Log(totalmass);
         }
     }
 
