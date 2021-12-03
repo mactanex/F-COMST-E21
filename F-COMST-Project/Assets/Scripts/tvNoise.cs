@@ -22,10 +22,7 @@ public class tvNoise : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            interactWithTv();
-        }
+        
     }
 
     public void interactWithTv()
