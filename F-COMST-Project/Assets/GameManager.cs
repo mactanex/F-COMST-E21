@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject HigherRightN;
 
     public ExplodingCow explodingCow;
-
+    public GameObject GHOUL;
     public int seconds = 0;
     int i = 0;
     void Awake()
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //AudioManager.Play("music");
+        AudioManager.Play("music");
         StartCoroutine(time());
     }
 
@@ -64,10 +65,18 @@ public class GameManager : MonoBehaviour
                 break;
         }
         i++;
+        if (Instance.i == 1)
+        {
+            GHOUL.SetActive(true);
+        }
         if (Instance.i == 3)
         {
             AudioManager.Play("MOOO");
             Instance.explodingCow.EnableCow();
+        }
+        if(Instance.i == 4)
+        {
+            StartCoroutine(Finish());
         }
     }
 
@@ -86,6 +95,15 @@ public class GameManager : MonoBehaviour
         {
             timeCount();
             yield return new WaitForSeconds(1);
+        }
+    }
+
+    IEnumerator Finish()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(3);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
     void timeCount()

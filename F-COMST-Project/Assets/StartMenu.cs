@@ -7,6 +7,7 @@ public class StartMenu : MonoBehaviour
 {
     private void Start()
     {
+        AudioManager.Play("music");
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
