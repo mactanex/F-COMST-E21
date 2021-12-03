@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public ExplodingCow explodingCow;
     public GameObject GHOUL;
     public int seconds = 0;
-    int i = 2;
+    int i = 0;
     void Awake()
     {
         if (Instance == null)
@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         }
         if (Instance.i == 3)
         {
-            AudioManager.DelayAndPlay("MOOO",5.5f);
+            AudioManager.DelayAndPlay("MOOO",2.5f);
             Instance.explodingCow.EnableCow();
         }
         if(Instance.i == 4)
