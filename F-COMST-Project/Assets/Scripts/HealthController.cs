@@ -27,6 +27,8 @@ public class HealthController : MonoBehaviour
     public GameOverScript GameOverScreen;
     public Camera Camera;
 
+    private bool isDeath = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,12 +37,14 @@ public class HealthController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(currentPlayerHealth <= 0)
+        if(currentPlayerHealth <= 0 && !isDeath)
         {
             Camera.GetComponent<Animator>().SetBool("Death", true);
             Cursor.lockState = CursorLockMode.None;
             InGameMenu.GameIsPaused = true;
+            
             StartCoroutine(GameOver());
+            isDeath = true;
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
@@ -107,5 +111,6 @@ public class HealthController : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         GameOverScreen.GameOver();
+        AudioManager.Play("Gameover");
     }
 }
