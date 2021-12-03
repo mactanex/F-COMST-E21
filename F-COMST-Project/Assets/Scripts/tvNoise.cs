@@ -11,6 +11,7 @@ public class tvNoise : MonoBehaviour
     public Material blankScrene;
     public Material staticNoise;
     public Material JumpScare;
+    private bool jumpscare = false;
 
     // Start is called before the first frame update
     void Start()
@@ -22,33 +23,44 @@ public class tvNoise : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        
+    }
+
+    public void interactWithTv()
+    {
+        var materials = renderer.sharedMaterials;
+
+        if (string.Equals(materials[1].name, "YourPic"))
         {
-            var materials = renderer.sharedMaterials;
+            source.clip = audioclips[0];
+            source.loop = true;
+            source.Play();
+            materials[1] = staticNoise;
+        }
 
-            if (string.Equals(materials[1].name, "YourPic"))
+        else if (string.Equals(materials[1].name, "tvNoise"))
+        {
+            source.Stop();
+            source.clip = audioclips[1];
+            source.loop = false;
+            if (!jumpscare)
             {
-                source.clip = audioclips[0];
-                source.loop = true;
-                source.Play();
-                materials[1] = staticNoise;
-            }
-
-            else if (string.Equals(materials[1].name, "tvNoise"))
-            {
-                source.Stop();
-                source.clip = audioclips[1];
-                source.loop = false;
                 materials[1] = JumpScare;
                 source.Play();
             }
-
-            else if (string.Equals(materials[1].name, "jumpScare"))
+            else
             {
                 materials[1] = blankScrene;
             }
-
-            renderer.sharedMaterials = materials;
         }
+
+        else if (string.Equals(materials[1].name, "jumpScare"))
+        {
+            source.Stop();
+            jumpscare = true;
+            materials[1] = blankScrene;
+        }
+
+        renderer.sharedMaterials = materials;
     }
 }

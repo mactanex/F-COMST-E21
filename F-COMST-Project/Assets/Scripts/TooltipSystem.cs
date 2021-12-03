@@ -7,9 +7,22 @@ using UnityEngine.UI;
 
 public class TooltipSystem : MonoBehaviour
 {
-    public TextMeshProUGUI Tooltip;
+    public  TextMeshProUGUI Tooltip;
+    public static TooltipSystem instance;
     private bool toolchipCheck;
     // Start is called before the first frame update
+
+    void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         Tooltip.enabled = false;
@@ -20,7 +33,10 @@ public class TooltipSystem : MonoBehaviour
     {
         
     }
-
+    public static void MaskDespawnMessage(float time, string txt)
+    {
+        instance.SetTooltipWithTimer(time, txt);
+    }
     public void SetTooltipText(string text)
     {
         Tooltip.text = text;

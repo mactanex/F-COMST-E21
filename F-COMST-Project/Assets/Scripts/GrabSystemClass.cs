@@ -16,8 +16,6 @@ public class GrabSystemClass : MonoBehaviour
 
     public TooltipSystem TooltipSystem;
 
-    ExplodingCow interActiveCow;
-
     // Reference to the currently held item.
     PickableItem pickedItem;
     PickablePuzzleItem pickedPuzzleItem;
@@ -48,13 +46,14 @@ public class GrabSystemClass : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 3f))
         {
+            var interactiveTv = hit.transform.GetComponent<tvNoise>();
             var explodableCow = hit.transform.GetComponent<ExplodingCow>();
             var pickable = hit.transform.GetComponent<PickableItem>();
             var collectable = hit.transform.GetComponent<CollectibleItem>();
             var pickablePuzzle = hit.transform.GetComponent<PickablePuzzleItem>();
             var colorPuzzleStarter = hit.transform.GetComponent<ColorPuzzleStarter>();
- 
-            if (pickable ||collectable || pickablePuzzle|| (colorPuzzleStarter && !m_ColorPuzzleManager.IsFinished()) || explodableCow)
+           
+            if (pickable ||collectable || pickablePuzzle|| (colorPuzzleStarter && !m_ColorPuzzleManager.IsFinished()) || explodableCow || interactiveTv)
             {
                 Crosshair.transform.GetComponent<UnityEngine.UI.Image>().sprite = GreenCrossHair;
                 if (colorPuzzleStarter)
@@ -64,6 +63,10 @@ public class GrabSystemClass : MonoBehaviour
                 if (explodableCow)
                 {
                     TooltipSystem.EnableTooltip("Wonder what happens if i press E?");
+                }
+                if (interactiveTv)
+                {
+                    TooltipSystem.EnableTooltip("Press E to interact");
                 }
                 else
                 {
@@ -120,11 +123,14 @@ public class GrabSystemClass : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, 3f))
                 {
                     // Check if object is pickable
+                    var interactiveTv = hit.transform.GetComponent<tvNoise>();
                     var explodableCow = hit.transform.GetComponent<ExplodingCow>();
                     var pickable = hit.transform.GetComponent<PickableItem>();
                     var collectable = hit.transform.GetComponent<CollectibleItem>();
                     var pickablePuzzle = hit.transform.GetComponent<PickablePuzzleItem>();
                     var colorPuzzleStarter = hit.transform.GetComponent<ColorPuzzleStarter>();
+
+
                     if (colorPuzzleStarter)
                     {
                         StartColorPuzzle();
@@ -153,7 +159,10 @@ public class GrabSystemClass : MonoBehaviour
                         explodableCow.explodeCow();
                         
                     }
-
+                    if(interactiveTv)
+                    {
+                        interactiveTv.interactWithTv();
+                    }
 
                 }
             }

@@ -29,6 +29,7 @@ public class Mask : MonoBehaviour
         {
             transform.rotation = Quaternion.identity;
             transform.position = originalPosition;
+            TooltipSystem.MaskDespawnMessage(2f, "Ups something went wrong");
         }
     }
 }
