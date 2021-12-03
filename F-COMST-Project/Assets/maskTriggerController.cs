@@ -28,6 +28,7 @@ public class maskTriggerController : MonoBehaviour
                 parentCeasarBust.PutMaskOn();
                 if (parentCeasarBust.CheckMask())// check if the mask is correct
                 {
+                    other.attachedRigidbody.isKinematic = true;
                     Debug.Log("Correct mask");
                 }
                 else
