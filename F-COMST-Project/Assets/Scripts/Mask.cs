@@ -5,6 +5,7 @@ using UnityEngine;
 public class Mask : MonoBehaviour
 {
     public int maskNumber;
+    public TooltipSystem tooltip;
     Vector3 originalPosition;
     Vector3 minRespawnPoint;
     Vector3 maxRespawnPoint;
@@ -29,6 +30,7 @@ public class Mask : MonoBehaviour
         {
             transform.rotation = Quaternion.identity;
             transform.position = originalPosition;
+            tooltip.SetTooltipWithTimer(2f, "Ups something went wrong");
         }
     }
 }

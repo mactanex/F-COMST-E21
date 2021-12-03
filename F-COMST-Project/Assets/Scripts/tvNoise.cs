@@ -11,6 +11,7 @@ public class tvNoise : MonoBehaviour
     public Material blankScrene;
     public Material staticNoise;
     public Material JumpScare;
+    private bool jumpscare = false;
 
     // Start is called before the first frame update
     void Start()
@@ -42,12 +43,21 @@ public class tvNoise : MonoBehaviour
             source.Stop();
             source.clip = audioclips[1];
             source.loop = false;
-            materials[1] = JumpScare;
-            source.Play();
+            if (!jumpscare)
+            {
+                materials[1] = JumpScare;
+                source.Play();
+            }
+            else
+            {
+                materials[1] = blankScrene;
+            }
         }
 
         else if (string.Equals(materials[1].name, "jumpScare"))
         {
+            source.Stop();
+            jumpscare = true;
             materials[1] = blankScrene;
         }
 
