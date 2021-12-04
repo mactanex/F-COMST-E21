@@ -524,7 +524,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "THE END (of demo)\n\nCreators: \t\t\tMalthe\t201607413\n\t\t\t\tKristoffer\t201607406\n\t\t\t\tAndr\xE9\t\t2020?????\n\t\t\t\tFrederik\t201608373\n\nSpecial
+  m_text: "THE END (of demo)\n\nCreators: \t\t\tMalthe\t201607413\n\t\t\t\tKristoffer\t201607406\n\t\t\t\tAndr\xE9\t\t201706753\n\t\t\t\tFrederik\t201608373\n\nSpecial
     thanks to: \t\t\tExploding cow"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
