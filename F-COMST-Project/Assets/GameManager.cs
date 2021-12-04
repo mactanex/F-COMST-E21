@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
         if (Instance.i == 1)
         {
             GHOUL.SetActive(true);
+            AudioManager.DelayAndPlay("Ghoul spawn", 5f);
         }
         if (Instance.i == 3)
         {
