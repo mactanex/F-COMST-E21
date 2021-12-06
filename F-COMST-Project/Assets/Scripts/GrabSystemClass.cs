@@ -269,6 +269,11 @@ public class GrabSystemClass : MonoBehaviour
         {
             Flashlight.enabled = false;
         }
+
+        if(puzzleItem.gameObject.tag == "puzzle3")
+        {
+            puzzleItem.Rb.constraints = RigidbodyConstraints.None;
+        }
     }
     private void DropItem(PickableItem item)
     {
@@ -291,11 +296,6 @@ public class GrabSystemClass : MonoBehaviour
         carrying = false;
         pickedPuzzleItem = null;
         puzzleItem.Rb.useGravity = true;
-
-        if(puzzleItem.gameObject.tag == "puzzle3")
-        {
-            Debug.Log("Mask puzzle piece");
-        }
     }
 
     private void StartColorPuzzle()

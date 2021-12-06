@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     public GameObject HigherLeftN;
     public GameObject HigherRightN;
 
+    public GameObject Player;
+    public GameObject IntroCamera;
+    public GameObject HUD;
     public ExplodingCow explodingCow;
     public GameObject GHOUL;
     public int seconds = 0;
@@ -31,8 +34,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        AudioManager.Play("music");
+        AudioManager.Play("music",0.01f);
+        AudioManager.Play("Voiceover");
+        Player.SetActive(false);
+        HUD.SetActive(false);
         StartCoroutine(time());
+        StartCoroutine(IntroCinematic());
     }
 
     // Update is called once per frame
@@ -67,6 +74,7 @@ public class GameManager : MonoBehaviour
         if (Instance.i == 1)
         {
             GHOUL.SetActive(true);
+            AudioManager.DelayAndPlay("Ghoul spawn", 5f);
         }
         if (Instance.i == 3)
         {
@@ -96,6 +104,18 @@ public class GameManager : MonoBehaviour
             timeCount();
             yield return new WaitForSeconds(1);
         }
+    }
+
+    IEnumerator IntroCinematic()
+    {
+        yield return new WaitForSeconds(20f);
+        Player.SetActive(true);
+        IntroCamera.SetActive(false);
+        HUD.SetActive(true);
+        AudioManager.Stop("music");
+        AudioManager.DelayAndPlay("music",7f);
+        AudioManager.DelayAndPlay("OUTOFHERE", 2f);
+
     }
 
     IEnumerator Finish()

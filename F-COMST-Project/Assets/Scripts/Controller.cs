@@ -181,7 +181,7 @@ public class Controller : MonoBehaviour
                 if (isRunning)
                 {
                     audio.clip = RunClips[Random.Range(0, RunClips.Length)];
-                    //audio.volume = 0.1f;
+                    audio.volume = 0.01f;
                     StartCoroutine(WaitForFootSteps(0.25f));
                     //AudioSource source = AudioManager.GetSource("Run");
                     if (isMoving && !audio.isPlaying) audio.Play(); // if player is moving and audiosource is not playing play it
@@ -192,7 +192,7 @@ public class Controller : MonoBehaviour
                 {
                     audio.clip = WalkClips[Random.Range(0, WalkClips.Length)];
                     StartCoroutine(WaitForFootSteps(0.25f));
-                    //audio.volume = 0.1f; 
+                    audio.volume = 0.01f; 
                     if (isMoving && !audio.isPlaying) audio.Play(); // if player is moving and audiosource is not playing play it
                     if (!isMoving) audio.Stop(); // if player is not moving and audiosource is playing stop it
                 }

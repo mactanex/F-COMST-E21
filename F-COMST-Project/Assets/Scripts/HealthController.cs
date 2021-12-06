@@ -45,13 +45,14 @@ public class HealthController : MonoBehaviour
             
             StartCoroutine(GameOver());
             isDeath = true;
+            AudioManager.Play("DEATH");
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            TakeDamage(20);
-        }
+        //if (Input.GetKeyDown(KeyCode.V))
+        //{
+        //    TakeDamage(20);
+        //}
         if (startCooldown)
         {
             healCooldown -= Time.deltaTime;
