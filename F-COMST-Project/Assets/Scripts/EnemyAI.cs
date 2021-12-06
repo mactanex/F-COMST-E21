@@ -21,6 +21,8 @@ public class EnemyAI : MonoBehaviour
     //patrolling
     public Vector3 walkPoint;
     public int key;
+    private float spawntime;
+    public float damage;
     public bool canAttack;
     public bool[] Path;
     private float cooldown = 1.2f;
@@ -44,7 +46,7 @@ public class EnemyAI : MonoBehaviour
         player = GameObject.Find("Player").transform; //PlayerObject skal hedde hvad spiller objektet hedder
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
-      
+        spawntime = GameManager.GetSeconds();
     }
 
     // Start is called before the first frame update
@@ -61,9 +63,11 @@ public class EnemyAI : MonoBehaviour
      // Update is called once per frame
      void Update()
      {
-         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
+        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
-       
+
+        agent.speed = 3+0.01f*GameManager.GetSeconds();
+        damage = damage >= 60 ? 60 : 30+0.5f * (GameManager.GetSeconds()-spawntime);
 
         if (!canAttack)
         {
@@ -110,7 +114,6 @@ public class EnemyAI : MonoBehaviour
 
         if (Vector3.Distance(transform.position,walkPoint) <=1) //tjek om destination er nået
         {
-           
             Debug.Log("it works");
             FixedWalkPoint();
         }
@@ -123,7 +126,6 @@ public class EnemyAI : MonoBehaviour
     private void ChasePlayer()
     {
         agent.SetDestination(player.position); //enemy position skal være players position
-
     }
 
 
@@ -134,7 +136,7 @@ public class EnemyAI : MonoBehaviour
         if (playerInAttackRange == true)
         {
 
-            HC.TakeDamage(60);
+            HC.TakeDamage(damage);
 
         }
     }
