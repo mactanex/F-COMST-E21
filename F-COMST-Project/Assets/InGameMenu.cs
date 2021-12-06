@@ -8,6 +8,8 @@ public class InGameMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     
     public GameObject InGameMenuUI;
+    public GameObject player;
+    public HealthController HC;
     private void Start()
     {
         GameIsPaused = false;
@@ -15,18 +17,22 @@ public class InGameMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if(player.activeSelf == true && !HC.isDeath)
         {
-            if(GameIsPaused)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
+                if (GameIsPaused)
+                {
+                    Resume();
+                }
+                else
+                {
+                    Pause();
+                }
 
+            }
         }
+        
     }
 
     public void Resume()

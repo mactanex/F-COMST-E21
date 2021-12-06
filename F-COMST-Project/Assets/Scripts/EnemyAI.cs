@@ -51,12 +51,13 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         spawntime = GameManager.GetSeconds();
+        audio = GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update
         void Start()
      {
-        audio = GetComponent<AudioSource>();
+        
         //agent.autoBraking = false; //skal måske fjernes
         walkPoint = new Vector3(26 + 8.74f, transform.position.y, 0 + 10.07f); //walkpoint 10 ,  starter her
         agent.SetDestination(walkPoint);
