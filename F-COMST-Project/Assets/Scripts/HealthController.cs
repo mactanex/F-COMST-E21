@@ -27,7 +27,8 @@ public class HealthController : MonoBehaviour
     public GameOverScript GameOverScreen;
     public Camera Camera;
 
-    private bool isDeath = false;
+    [HideInInspector]
+    public bool isDeath = false;
 
     // Start is called before the first frame update
     void Start()

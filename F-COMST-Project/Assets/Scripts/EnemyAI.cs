@@ -31,6 +31,7 @@ public class EnemyAI : MonoBehaviour
     public bool[] Path;
     private float cooldown = 1.2f;
     private float maxCooldown = 1.2f;
+    private bool walking;
 
 
 
@@ -51,12 +52,14 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         spawntime = GameManager.GetSeconds();
+        audio = GetComponent<AudioSource>();
+        walking = true;
     }
 
     // Start is called before the first frame update
         void Start()
      {
-        audio = GetComponent<AudioSource>();
+        
         //agent.autoBraking = false; //skal måske fjernes
         walkPoint = new Vector3(26 + 8.74f, transform.position.y, 0 + 10.07f); //walkpoint 10 ,  starter her
         agent.SetDestination(walkPoint);
@@ -73,6 +76,14 @@ public class EnemyAI : MonoBehaviour
 
         agent.speed = 3+0.01f*GameManager.GetSeconds();
         damage = damage >= 60 ? 60 : 30+0.5f * (GameManager.GetSeconds()-spawntime);
+
+
+        if(!audio.isPlaying && walking)
+        {
+            audio.clip = WalkClips[Random.Range(0, WalkClips.Length)];
+            audio.Play();
+        }
+
 
         if (!canAttack)
         {
@@ -126,7 +137,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Patrolling() 
     {
-
+        walking = true;
         if (Vector3.Distance(transform.position,walkPoint) <=1) //tjek om destination er nået
         {
             Debug.Log("it works");
@@ -140,6 +151,7 @@ public class EnemyAI : MonoBehaviour
 
     private void ChasePlayer()
     {
+        walking = true;
         agent.SetDestination(player.position); //enemy position skal være players position
     }
 
@@ -147,6 +159,7 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator AttackPlayer()
     {
         canAttack = false;
+        walking = false;
         yield return new WaitForSeconds(1f);
         if (playerInAttackRange == true)
         {
