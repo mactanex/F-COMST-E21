@@ -46,31 +46,73 @@ MonoBehaviour:
   sounds:
   - name: music
     clip: {fileID: 8300000, guid: 0728bdf6bf2588442bc489252d5eeb92, type: 3}
-    volume: 0.109
+    volume: 0.01
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: Jump
-    clip: {fileID: 8300000, guid: dc0f7110428091942897a82531997b53, type: 3}
+    clip: {fileID: 8300000, guid: 895f0e3bdd98e814dacbfd5f9c6398ac, type: 3}
     volume: 1
     pitch: 1.1
     loop: 0
     source: {fileID: 0}
   - name: Land
     clip: {fileID: 8300000, guid: 220d31ecad78e69439a84c70847638ac, type: 3}
-    volume: 1
+    volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: Success
     clip: {fileID: 8300000, guid: 2db96fbf558f19944b15126dfa80f52e, type: 3}
-    volume: 1
+    volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: SuccessFinal
     clip: {fileID: 8300000, guid: d7f509ac8a374d14fa0e6b1a9b6cae62, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Hurt
+    clip: {fileID: 8300000, guid: 951e1afd677605e45900765cebb84281, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: MOOO
+    clip: {fileID: 8300000, guid: e4371ad3fe2ed8e44ac80386f1235117, type: 3}
     volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Gameover
+    clip: {fileID: 8300000, guid: e85de222689861440a6e91a1e0886cac, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: DEATH
+    clip: {fileID: 8300000, guid: a0f0b01a635fff54090143c30007f378, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Voiceover
+    clip: {fileID: 8300000, guid: 7ce6aaf88377cf842a83d9cc18edf5ab, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: OUTOFHERE
+    clip: {fileID: 8300000, guid: 041136de3457c2848945ad2017801ca5, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Ghoul spawn
+    clip: {fileID: 8300000, guid: 295565b31a180064ba66c6cdd31a21b7, type: 3}
+    volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}
