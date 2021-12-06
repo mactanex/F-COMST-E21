@@ -134,7 +134,7 @@ public class EnemyAI : MonoBehaviour
         if (playerInAttackRange == true)
         {
 
-            HC.TakeDamage(2);
+            HC.TakeDamage(60);
 
         }
     }
