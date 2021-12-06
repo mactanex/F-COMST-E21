@@ -13,6 +13,7 @@ public class tvNoise : MonoBehaviour
     public Material JumpScare;
     private bool jumpscare = false;
 
+    public GameObject Achievement;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +48,8 @@ public class tvNoise : MonoBehaviour
             {
                 materials[1] = JumpScare;
                 source.Play();
+                Achievement.SetActive(true);
+                StartCoroutine(AchievementWait());
             }
             else
             {
@@ -62,5 +65,12 @@ public class tvNoise : MonoBehaviour
         }
 
         renderer.sharedMaterials = materials;
+    }
+
+    IEnumerator AchievementWait()
+    {
+        yield return new WaitForSeconds(5f);
+        
+        Achievement.SetActive(false);
     }
 }
