@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
+using Random = UnityEngine.Random;
 
 
 //kilde/inspiration: https://www.youtube.com/watch?v=UjkSFoLxesw&ab_channel=Dave%2FGameDevelopment
@@ -18,21 +20,13 @@ public class EnemyAI : MonoBehaviour
 
     //patrolling
     public Vector3 walkPoint;
-    public Vector3 lastPosition;
     public int key;
-    public bool walkPointSet;
-    public bool xForward;
-    public bool zForward;
-    public bool xBackward;
-    public bool zBackward;
-    public bool stuckFlag;
-    public float walkPointRange;
-    public int count;
-    public int secondCount;
-    public int thirdCount;
+    public bool canAttack;
     public bool[] Path;
+    private float cooldown = 1.2f;
+    private float maxCooldown = 1.2f;
 
-    
+
 
 
 
@@ -68,48 +62,51 @@ public class EnemyAI : MonoBehaviour
      void Update()
      {
          playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        //playerInSightRange = Physics.Raycast(transform.position, transform.forward, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
        
 
+        if (!canAttack)
+        {
+            cooldown -= Time.deltaTime;
+            if(cooldown <= 0)
+            {
+                canAttack = true;
+                cooldown = maxCooldown;
+            }
+        }
+        
         if (playerInSightRange== false)
         {
-            anim.SetBool("IsRunning", true);
-            Patrolling2();
+            anim.SetBool("IsAttacking", false);
+           // anim.SetBool("IsRunning", true);
+            Patrolling();
         }
         else if (playerInSightRange == true && playerInAttackRange == false) 
         {
-            anim.SetBool("IsRunning", true);
+            anim.SetBool("IsAttacking", false);
+            //anim.SetBool("IsRunning", true);
             ChasePlayer();
             playerInSightRange = true;
         }
         else if (playerInAttackRange == true)
         {
-            anim.SetBool("IsRunning", true);
-            AttackPlayer();
-        }
-      /*  else if (longTime == true && playerInSightRange == false && playerInAttackRange == false && thinkingFlag == false) 
-        {
-            anim.SetBool("IsRunning", true);
-            GetCloseToPlayer();
-        }*/
 
-        //float x = lastPosition.magnitude - transform.position.magnitude;
+            anim.SetBool("IsAttacking", true);
 
-/*        if(lastPosition.magnitude - transform.position.magnitude ==0) 
-        {
-            secondCount++;
+            if (canAttack)
+            {
+                StartCoroutine(AttackPlayer());
+                
+            }
         }
-        lastPosition = transform.position; */
+    
     }
 
 
   
 
-    private void Patrolling2() 
+    private void Patrolling() 
     {
-
-      //  Debug.Log("it doesnt work");
 
         if (Vector3.Distance(transform.position,walkPoint) <=1) //tjek om destination er nået
         {
@@ -123,66 +120,30 @@ public class EnemyAI : MonoBehaviour
 
     }
 
-
-  /*  private void Patrolling() 
+    private void ChasePlayer()
     {
-        if (secondCount >= 90) 
-        {
-            stuckFlag = true;
-            secondCount = 0;
-        
-        }
-
-
-        if (walkPointSet==false)
-        {
-            searchWalkPoint();
-
-           
-        }
-
-        if (walkPointSet == true)
-        {
-            agent.SetDestination(walkPoint);
-        }
-
-     /*   if (thirdCount >= 1000) 
-        {
-            fourthCount++;
-            thirdCount = 0;
-        }
-
-        if (fourthCount >= 5) 
-        {
-           // longTime = true;
-            fourthCount = 0;
-        }
-       
-         Vector3 distanceToWalkPoint = transform.position - walkPoint; //tjek om walkpoint er indenfor en realistisk distance
-        if (distanceToWalkPoint.magnitude < 1f) //hvis ikke lav et nyt walkpoint
-        { walkPointSet = false;
-            Debug.Log("walkpoint ikke realistisk distance");
-        }
-
-
-
-        if (transform.hasChanged!) 
-        {
-            count++;
-            //Debug.Log("hasChanged!");
-        }
-
-        if (count >= 90) 
-        {
-            walkPointSet = false;
-            count = 0;
-        }
-        
-        
+        agent.SetDestination(player.position); //enemy position skal være players position
 
     }
 
-        */
+
+    private IEnumerator AttackPlayer()
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(1f);
+        if (playerInAttackRange == true)
+        {
+
+            HC.TakeDamage(2);
+
+        }
+    }
+
+
+
+   
+
+
 
     public void FixedWalkPoint() 
     {
@@ -542,158 +503,9 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
- /*   private void searchWalkPoint()
-    {
+ 
 
-         float randomZ, randomX;
-
-         FindKey();
-
-
-       // Debug.Log("key is " + key);
-
-         switch (key)
-        {
-            case 1:
-                randomZ = Random.Range(0, walkPointRange); //find z-koordinat "walk-point"
-                randomX = Random.Range(0, 0);//find x-koordinat "walk-point"
-                                             //  Debug.Log("Z");
-                zForward = true;
-                zBackward = false;
-                xForward = false;
-                xBackward = false;
-                //Debug.Log("z forward");
-                break;
-            case 2:
-                randomZ = Random.Range(-walkPointRange, 0); //find z-koordinat "walk-point"
-                randomX = Random.Range(0, 0);//find x-koordinat "walk-point"
-                                             // Debug.Log("minus Z");
-                zForward = false;
-                zBackward = true;
-                xForward = false;
-                xBackward = false;
-               // Debug.Log("z backward");
-                break;
-            case 3:
-                randomZ = Random.Range(0, 0); //find z-koordinat "walk-point"
-                randomX = Random.Range(0, walkPointRange);//find x-koordinat "walk-point"
-                                                          //   Debug.Log("X");
-                zForward = false;
-                zBackward = false;
-                xForward = true;
-                xBackward = false;
-              //  Debug.Log("x forward");
-                break;
-            case 4:
-                randomZ = Random.Range(0, 0); //find z-koordinat "walk-point"
-                randomX = Random.Range(-walkPointRange, 0);//find x-koordinat "walk-point"
-                                                           // Debug.Log("minus X");
-                xForward = false;
-                zBackward = false;
-                xForward = false;
-                xBackward = true;
-               // Debug.Log("x backward");
-                break;
-            default:
-                randomZ = Random.Range(-walkPointRange, walkPointRange); //find z-koordinat "walk-point"
-                randomX = Random.Range(-walkPointRange, walkPointRange);//find x-koordinat "walk-point"
-               // Debug.Log("default walkrange");
-                break;
-        }
-
-
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ); //flyt enemy til walkpoint
-
-        walkPoint = new Vector3(55f,transform.position.y,50f);
-
-        if (Physics.Raycast(walkPoint, -transform.up, 1f, whatIsGround)) //tjek om walkpoint er indenfor map
-        {
-            walkPointSet = true;
-            //Debug.Log("raycast works");
-        }
-        else 
-        {
-              walkPointSet = false;
-           // Debug.Log("raycast works");
-        }
-
-    }
-
-
-    private int FindKey()
-    {
-        key = Random.Range(1, 4);
-
-        if (stuckFlag == false)
-        {
-           //Debug.Log("should go here");
-            if (zForward == true)
-            {
-                while (key == 2)
-                {
-                    key = Random.Range(1, 4);
-                }
-            }
-            else if (zBackward == true)
-            {
-                while (key == 1)
-                {
-                    key = Random.Range(1, 4);
-                }
-            }
-            else if (xForward == true)
-            {
-                while (key == 4)
-                {
-                    key = Random.Range(1, 4);
-                }
-            }
-            else if (xBackward == true)
-            {
-                while (key == 3)
-                {
-                    key = Random.Range(1, 4);
-                }
-            }
-        }
-
-        else
-        {
-            if (thirdCount <= 1)
-            {
-                Debug.Log("stuck");
-
-                if (zForward == true)
-                    key = 2;
-                else if (zBackward == true)
-                    key = 1;
-                else if (xForward == true)
-                    key = 4;
-                else if (xBackward == true)
-                    key = 3;
-            }
-            thirdCount++;
-
-            if (thirdCount >= 300)
-            {
-                stuckFlag = false;
-            }
-        }
-
-        return key;
-    }*/
-
-    private void ChasePlayer()
-    {
-        agent.SetDestination(player.position); //enemy position skal være players position
-        
-    }
-
-    private void AttackPlayer()
-    {
-        HC.TakeDamage(75);
-        //agent.isStopped = true;
-    }
+   
 
 
 }
