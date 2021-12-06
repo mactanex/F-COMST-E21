@@ -75,6 +75,14 @@ public class EnemyAI : MonoBehaviour
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
         agent.speed = 3+0.01f*GameManager.GetSeconds();
+        if (!anim.GetBool("IsAttacking")) 
+        {
+            anim.speed = 0.3f + 0.005f * GameManager.GetSeconds();
+        }
+        else 
+        {
+            anim.speed = 1;
+        }
         damage = damage >= 60 ? 60 : 30+0.5f * (GameManager.GetSeconds()-spawntime);
 
 
