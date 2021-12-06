@@ -64,13 +64,13 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Success
     clip: {fileID: 8300000, guid: 2db96fbf558f19944b15126dfa80f52e, type: 3}
-    volume: 0.3
+    volume: 0.2
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: SuccessFinal
     clip: {fileID: 8300000, guid: d7f509ac8a374d14fa0e6b1a9b6cae62, type: 3}
-    volume: 0.3
+    volume: 0.2
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -82,13 +82,13 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: MOOO
     clip: {fileID: 8300000, guid: e4371ad3fe2ed8e44ac80386f1235117, type: 3}
-    volume: 1
+    volume: 0.2
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: Gameover
     clip: {fileID: 8300000, guid: e85de222689861440a6e91a1e0886cac, type: 3}
-    volume: 1
+    volume: 0.2
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -112,7 +112,19 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Ghoul spawn
     clip: {fileID: 8300000, guid: 295565b31a180064ba66c6cdd31a21b7, type: 3}
-    volume: 0.3
+    volume: 0.01
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: ColorFailure
+    clip: {fileID: 8300000, guid: b66084d7ed040c9448ba347eec232aec, type: 3}
+    volume: 0.01
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: ColorSuccess
+    clip: {fileID: 8300000, guid: 3565ddba53a485247b4413441e821950, type: 3}
+    volume: 0.01
     pitch: 1
     loop: 0
     source: {fileID: 0}

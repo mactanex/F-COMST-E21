@@ -25,7 +25,7 @@ public class CP_OnClick : MonoBehaviour, IPointerClickHandler
             m_ColorPuzzleManager.picked = false;
             m_ColorPuzzleManager.pickedObject = null;
             GoBack();
-            
+            AudioManager.Play("ColorFailure");
 
         } else if (!m_ColorPuzzleManager.picked)
         {
@@ -62,8 +62,8 @@ public class CP_OnClick : MonoBehaviour, IPointerClickHandler
                       "easeType", "linear",
                       "onComplete", "GoBackSuccess"
                   ));
-                    
 
+                    AudioManager.Play("ColorSuccess");
                     Clicked = false;
                     m_ColorPuzzleManager.pickedObject.GetComponent<CP_OnClick>().Clicked = false;
                     m_ColorPuzzleManager.picked = false;
@@ -75,6 +75,7 @@ public class CP_OnClick : MonoBehaviour, IPointerClickHandler
                 }
                 else
                 {
+                    AudioManager.Play("ColorFailure");
                     Clicked = false;
                     m_ColorPuzzleManager.picked = false;
                     m_ColorPuzzleManager.pickedObject.GetComponent<CP_OnClick>().Clicked = false;
@@ -85,6 +86,7 @@ public class CP_OnClick : MonoBehaviour, IPointerClickHandler
             }
             else
             {
+                AudioManager.Play("ColorFailure");
                 Clicked = false;
                 m_ColorPuzzleManager.picked = false;
                 m_ColorPuzzleManager.pickedObject.GetComponent<CP_OnClick>().Clicked = false;
