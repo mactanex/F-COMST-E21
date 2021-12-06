@@ -9,7 +9,7 @@ public class HealthController : MonoBehaviour
 
     public float currentPlayerHealth = 100.0f;
     [SerializeField] private float maxPlayerHealth = 100.0f;
-    [SerializeField] private float regenRate = 1;
+    [SerializeField] private float regenRate = 10;
     private bool canRegen = false;
 
     [Header("Add Blood splatter image here")]
