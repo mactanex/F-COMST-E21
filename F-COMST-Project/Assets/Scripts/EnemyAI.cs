@@ -14,6 +14,9 @@ public class EnemyAI : MonoBehaviour
     public Transform player; //player
     private Animator anim;
     public HealthController HC;
+    public AudioClip[] WalkClips;
+    public AudioClip spotted; 
+    AudioSource audio;
 
     public LayerMask whatIsGround, whatIsPlayer;
 
@@ -21,6 +24,7 @@ public class EnemyAI : MonoBehaviour
     //patrolling
     public Vector3 walkPoint;
     public int key;
+    private bool chasing;
     private float spawntime;
     public float damage;
     public bool canAttack;
@@ -52,6 +56,7 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
         void Start()
      {
+        audio = GetComponent<AudioSource>();
         //agent.autoBraking = false; //skal måske fjernes
         walkPoint = new Vector3(26 + 8.74f, transform.position.y, 0 + 10.07f); //walkpoint 10 ,  starter her
         agent.SetDestination(walkPoint);
@@ -82,15 +87,25 @@ public class EnemyAI : MonoBehaviour
         if (playerInSightRange== false)
         {
             anim.SetBool("IsAttacking", false);
+            chasing = false;
            // anim.SetBool("IsRunning", true);
             Patrolling();
         }
         else if (playerInSightRange == true && playerInAttackRange == false) 
         {
+
             anim.SetBool("IsAttacking", false);
             //anim.SetBool("IsRunning", true);
+            
             ChasePlayer();
             playerInSightRange = true;
+            if(chasing == false)
+            {
+                audio.clip = spotted;
+                audio.Play();
+                chasing = true;
+            }
+            
         }
         else if (playerInAttackRange == true)
         {
