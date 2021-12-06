@@ -81,6 +81,7 @@ public class EnemyAI : MonoBehaviour
         if(!audio.isPlaying && walking)
         {
             audio.clip = WalkClips[Random.Range(0, WalkClips.Length)];
+            audio.volume = 1;
             audio.Play();
         }
 
@@ -113,6 +114,7 @@ public class EnemyAI : MonoBehaviour
             if(chasing == false)
             {
                 audio.clip = spotted;
+                audio.volume = 0.3f;
                 audio.Play();
                 chasing = true;
             }
