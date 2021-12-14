@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(CharacterController))]
@@ -19,7 +20,7 @@ public class Controller : MonoBehaviour
     public float crouchSmooth = 10f;
 
     Vector3 lastVelocity = Vector3.zero;
-
+    public Slider sensitivitySlider;
     [Header("Audio")]
 
     public float PitchMin = 1.0f;
@@ -76,7 +77,8 @@ public class Controller : MonoBehaviour
 
         m_VerticalAngle = 0.0f;
         m_HorizontalAngle = transform.localEulerAngles.y;
-
+        sensitivitySlider.onValueChanged.AddListener(delegate { ApplySensitivity(); });
+        sensitivitySlider.value = MouseSensitivity;
     }
 
     // Update is called once per frame
@@ -222,6 +224,11 @@ public class Controller : MonoBehaviour
     {
         AudioManager.Play(clip);
     }
+    
 
+    public void ApplySensitivity()
+    {
+        MouseSensitivity = sensitivitySlider.value; 
+    }
     IEnumerator WaitForFootSteps(float stepsLength) { step = false; yield return new WaitForSeconds(stepsLength); step = true; }
 }
